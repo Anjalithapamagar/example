@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">android_firebase</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="foto_tomada">Foto tomada</string>
+    <string name="permiso_autorizado">Photo taken</string>
+    <string name="permiso_denegado">Permission Denied</string>
+    <string name="forgot_pass">Forgot your password</string>
+    <string name="create_account">Create Account</string>
+
+    <!--ConfigcTEXT for General Propouse -->
+    <string name="email">Email</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="add">Add</string>
+    <string name="cancelar">Cancel</string>
+    <string name="recover_password">Recover Password</string>
+
+    <!--Configc TEXT for ContactsScreen -->
+    <string name="country">Country</string>
+    <string name="city">City</string>
+    <string name="error_sending_email">Error sending email</string>
+    <string name="email_sent">Email sent</string>
+    <!--Config TEXT for Home  -->
+    <string name="welcome">Welcome</string>
+    <!--Config TEXT for Login Screen -->
+    <string name="you_do_dnot_dhave_daccount">You do not have an account?, Sign up</string>
+    <string name="login">Log in</string>
+    <string name="forget_pass">Did you forget your password?</string>
+    <string name="continue_as_guest">Continue as a guest</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="password">Password</string>
+    <string name="check_in">Check in</string>
+    <string name="sign_off">Sign off</string>
+    <string name="do_you_already_have_account">Do you already have an account? Log in</string>
+    <string name="successful_registration">Successful registration</string>
+    <!--For use to Crash  -->
+    <string name="force_crashlytics">Force Quit Crashlytics</string>
+    <string name="there_are_empty_fields">There are empty fields</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="no_contacts">Don,t found\nContacts</string>
+    <string name="delete_icon">Delete Icon</string>
+
+    <string name="name">name</string>
+    <string name="phone">Phone</string>
+    <string name="phone_format">Phone +16475201902</string>
+    <string name="delete_contact">Delete Contact</string>
+    <string name="are_you_sure_you_want_to_delete_the_contact">Are you sure you want to delete the contact?</string>
+    <string name="accept">Accept</string>
+    <string name="add_note">Add Note</string>
+    <string name="no_notes_found">No Notes Found</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
+    <string name="delete_note">Delete Note</string>
+    <string name="are_you_sure_you_want_to_delete_the_note">Are you sure you want to delete the note?</string>
+    <!--For use to Photo  -->
+    <string name="add_photo">Add Photo</string>
+    <string name="deleted_image">Deleted image</string>
+    <string name="error_deleting_image">Error deleting image</string>
+    <string name="force_error">Force Error</string>
+
+</resources>
