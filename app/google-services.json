@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "884013313302",
+    "firebase_url": "https://capstoneproyect-c71ea-default-rtdb.firebaseio.com",
+    "project_id": "capstoneproyect-c71ea",
+    "storage_bucket": "capstoneproyect-c71ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884013313302:android:7fec72506224a09a8af437",
+        "android_client_info": {
+          "package_name": "ca.centennial.finalproyect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcMczacchYxGZoyya3J1dvLmWvAD9wwiM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
