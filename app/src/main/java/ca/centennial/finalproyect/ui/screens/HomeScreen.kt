@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
@@ -272,7 +273,7 @@ fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         BottomNavScreen.Contact,
         BottomNavScreen.Note,
-        BottomNavScreen.Photos
+        BottomNavScreen.Photos,
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -332,8 +333,8 @@ sealed class BottomNavScreen(val route: String, val title: String, val icon: Ima
     )
     object Note : BottomNavScreen(
         route = "notes",
-        title = "Notes",
-        icon = Icons.Default.List
+        title = "BMI Calculator",
+        icon = Icons.Default.AddCircle
     )
     object Photos : BottomNavScreen(
         route = "photos",

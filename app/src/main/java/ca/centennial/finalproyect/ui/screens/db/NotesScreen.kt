@@ -184,19 +184,20 @@ fun NoteItem(note: Note, firestore: FirestoreManager) {
                 fontWeight = FontWeight.Thin,
                 fontSize = 13.sp,
                 lineHeight = 15.sp)
+            Text(text = note.bmiResult,
+                fontWeight = FontWeight.Thin,
+                fontSize = 13.sp,
+                lineHeight = 15.sp)
+            Text(text = note.bmiCategory,
+                fontWeight = FontWeight.Thin,
+                fontSize = 13.sp,
+                lineHeight = 15.sp)
             IconButton(
                 onClick = { showDeleteNoteDialog = true },
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
 
             ) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete Icon")
-            }
-            IconButton(
-                onClick = { showDeleteNoteDialog = true },
-                modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-
-            ) {
-                Icon(imageVector = Icons.Default.Refresh, contentDescription = "Update")
             }
         }
     }
@@ -218,19 +219,37 @@ Contains input fields for the title and content of the note. Pressing the "Add" 
 fun AddNoteDialog(onNoteAdded: (Note) -> Unit, onDialogDismissed: () -> Unit) {
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
+    var height by remember { mutableStateOf("") }
+    var weight by remember { mutableStateOf("") }
+    var bmiResult by remember { mutableStateOf("") }
+    var bmiCategory by remember { mutableStateOf("") }
 
     AlertDialog(
         onDismissRequest = {},
-        title = { Text(text = stringResource(R.string.add_note)) },
+        title = { Text("BMI Calculator") },
         confirmButton = {
             Button(
                 onClick = {
+                    if (weight.isNotEmpty() && height.isNotEmpty()) {
+                        val weightValue = weight.toFloat()
+                        val heightValue = height.toFloat()
+                        val bmi = calculateBMI(weightValue, heightValue)
+                        bmiResult = "Your BMI is: $bmi"
+                        bmiCategory = getBMICategory(bmi)
+                    }
                     val newNote = Note(
                         title = title,
-                        content = content)
+                        content = content,
+                        height = height,
+                        weight = weight,
+                        bmiResult = bmiResult,
+                        bmiCategory = bmiCategory
+                        )
                     onNoteAdded(newNote)
                     title = ""
                     content = ""
+                    height = ""
+                    weight = ""
                 }
             ) {
                 Text(text = stringResource(R.string.add))
@@ -264,9 +283,38 @@ fun AddNoteDialog(onNoteAdded: (Note) -> Unit, onDialogDismissed: () -> Unit) {
                     maxLines = 4,
                     label = { Text(text = stringResource(R.string.content)) }
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = height,
+                    onValueChange = { height = it },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+                    maxLines = 4,
+                    label = { Text("Height in (Meters)") }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = weight,
+                    onValueChange = { weight = it },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+                    maxLines = 4,
+                    label = { Text("Weight in (Kilograms)") }
+                )
             }
         }
     )
+}
+
+fun calculateBMI(weight: Float, height: Float): Float {
+    return weight / (height * height)
+}
+
+fun getBMICategory(bmi: Float): String {
+    return when {
+        bmi < 18.5 -> "Underweight"
+        bmi in 18.5..24.9 -> "Normal weight"
+        bmi in 25.0..29.9 -> "Overweight"
+        else -> "Obesity"
+    }
 }
 
 @Composable
