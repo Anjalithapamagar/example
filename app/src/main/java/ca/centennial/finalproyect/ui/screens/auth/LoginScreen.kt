@@ -44,23 +44,18 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ca.centennial.finalproyect.R
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-
 import ca.centennial.finalproyect.ui.navigation.Routes
 import ca.centennial.finalproyect.ui.theme.Purple40
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.AuthRes
-
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
-import java.lang.RuntimeException
 /*
 ES
 Argumentos:
@@ -200,6 +195,7 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
              color = Color(0xFF363636)
          )*/
         Spacer(modifier = Modifier.height(15.dp))
+        /*
         SocialMediaButton(
             onClick = {
                 auth.signInWithGoogle(googleSignInLauncher)
@@ -208,7 +204,10 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
             icon = R.drawable.ic_google,
             color = Color(0xFFF1F1F1)
         )
+
+         */
         Spacer(modifier = Modifier.height(25.dp))
+        /*
         ClickableText(
             text = AnnotatedString(stringResource(R.string.force_crashlytics)),
             onClick = {
@@ -225,6 +224,8 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
                 color = Purple40
             )
         )
+
+         */
     }
 }
 
@@ -248,7 +249,8 @@ private suspend fun emailPassSignIn(email: String, password: String, auth: AuthM
     if(email.isNotEmpty() && password.isNotEmpty()) {
         when (val result = auth.signInWithEmailAndPassword(email, password)) {
             is AuthRes.Success -> {
-                analytics.logButtonClicked("Click: Iniciar sesión correo & contraseña")
+                analytics.logButtonClicked("Click: Login email and password")
+                // use navigaion to go
                 navigation.navigate(Routes.Home.route) {
                     popUpTo(Routes.Login.route) {
                         inclusive = true

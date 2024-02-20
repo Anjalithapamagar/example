@@ -36,10 +36,13 @@
     <string name="force_crashlytics">Force Quit Crashlytics</string>
     <string name="there_are_empty_fields">There are empty fields</string>
     <string name="add_contact">Add Contact</string>
-    <string name="no_contacts">Don,t found\nContacts</string>
+    <string name="no_contacts">Dont found Contacts</string>
     <string name="delete_icon">Delete Icon</string>
 
-    <string name="name">name</string>
+    <string name="name">Name</string>
+    <string name="lastname">last Name</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
     <string name="phone">Phone</string>
     <string name="phone_format">Phone +16475201902</string>
     <string name="delete_contact">Delete Contact</string>

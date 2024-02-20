@@ -3,6 +3,7 @@ package ca.centennial.finalproyect.utils
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
+import ca.centennial.finalproyect.model.Contact
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -14,6 +15,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
@@ -38,12 +40,55 @@ class AuthManager(private val context: Context) {
 
 
 
-    suspend fun createUserWithEmailAndPassword(email: String, password: String): AuthRes<FirebaseUser?> {
+    suspend fun createUserWithEmailAndPassword(email: String, password: String, contact: Contact): AuthRes<FirebaseUser?> {
+
         return try {
+            /*val displayName: String = "Camilo"
+            val lastName: String = "Meli"
+            val birthDate: String = "02/12/1982"
+            val height: Double = 175.00
+            val weight: Double = 130.00*/
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+            val user = authResult.user
+           /* user?.let {
+                val profileUpdates = UserProfileChangeRequest.Builder()
+                    .setDisplayName("$displayName $lastName") // Nombre completo
+                    // Puedes agregar más campos al displayName si lo deseas
+                    .build()
+                it.updateProfile(profileUpdates).await()
+            }*/
+            //val userData = UserData(name, surname, dateOfBirth, height.toDouble(), weight.toDouble())
+            /*val userData = Contact()
+            userData.lastName = "Meli"
+            userData.name = "Camilo"
+            userData.estatura = 175.00
+            userData.peso = 130.00*/
+
+
+
+
+            Firebase.firestore.collection("users").document(authResult.user!!.uid).set(contact)
+
+
+
             AuthRes.Success(authResult.user)
+
         } catch(e: Exception) {
             AuthRes.Error(e.message ?: "Error creating user")
+        }
+    }
+
+    private suspend fun saveAdditionalUserData(user: FirebaseUser?, birthDate: String, height: Double, weight: Double) {
+        // Aquí puedes implementar la lógica para guardar los datos adicionales en una base de datos Firebase
+        // Por ejemplo, utilizando Firestore o Realtime Database
+        // En este ejemplo, solo se imprime la información, pero deberías adaptarlo a tu estructura de base de datos
+        user?.let {
+            val userId = it.uid
+            println("Guardando datos adicionales para el usuario con ID: $userId")
+            println("Fecha de nacimiento: $birthDate")
+            println("Estatura: $height")
+            println("Peso: $weight")
+            // Aquí deberías guardar los datos en tu base de datos Firebase
         }
     }
 
@@ -106,14 +151,6 @@ class AuthManager(private val context: Context) {
         val signInIntent = googleSignInClient.signInIntent
         googleSignInLauncher.launch(signInIntent)
     }
-
-
-
-
-
-
-
-
 
 
 
