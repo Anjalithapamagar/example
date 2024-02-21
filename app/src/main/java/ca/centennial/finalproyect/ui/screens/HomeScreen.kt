@@ -16,8 +16,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.AlertDialog
@@ -56,6 +56,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ca.centennial.finalproyect.R
+import ca.centennial.finalproyect.ui.navigation.Routes
+import ca.centennial.finalproyect.ui.screens.db.ContactsScreen
+import ca.centennial.finalproyect.ui.screens.db.NotesScreen
+import ca.centennial.finalproyect.ui.screens.storage.CloudStorageScreen
+import ca.centennial.finalproyect.utils.AnalyticsManager
+import ca.centennial.finalproyect.utils.AuthManager
+import ca.centennial.finalproyect.utils.CloudStorageManager
+import ca.centennial.finalproyect.utils.FirestoreManager
+import ca.centennial.finalproyect.utils.RealtimeManager
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -68,18 +77,6 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebase.remoteconfig.ktx.get
 import com.google.firebase.remoteconfig.ktx.remoteConfig
-
-import ca.centennial.finalproyect.ui.navigation.Routes
-import ca.centennial.finalproyect.ui.screens.db.ContactsScreen
-import ca.centennial.finalproyect.ui.screens.db.NotesScreen
-import ca.centennial.finalproyect.ui.screens.storage.CloudStorageScreen
-import ca.centennial.finalproyect.utils.AnalyticsManager
-import ca.centennial.finalproyect.utils.AuthManager
-import ca.centennial.finalproyect.utils.CloudStorageManager
-import ca.centennial.finalproyect.utils.FirestoreManager
-import ca.centennial.finalproyect.utils.RealtimeManager
-
-import java.lang.RuntimeException
 
 private lateinit var mFirebaseRemoteConfig: FirebaseRemoteConfig
 private var welcomeMessage by mutableStateOf("Welcome")
@@ -133,7 +130,7 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                         } else {
                             Image(
                                 painter = painterResource(R.drawable.profile),
-                                contentDescription = "Foto de perfil por defecto",
+                                contentDescription = "Default profile photo",
                                 modifier = Modifier
                                     .padding(end = 8.dp)
                                     .size(40.dp)
@@ -161,8 +158,8 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                     IconButton(
                         onClick = {
                             val crashlytics = FirebaseCrashlytics.getInstance()
-                            crashlytics.setCustomKey("pruebaClaveHome", "Valor a enviar")
-                            crashlytics.log("Mensaje log desde HomeScreen")
+                            crashlytics.setCustomKey("Home Key test", "Value to send")
+                            crashlytics.log("Log message from HomeScreen")
                             crashlytics.setUserId(user?.uid ?: "No Id Found")
                             crashlytics.setCustomKeys {
                                 key("str", "hello")
@@ -172,7 +169,7 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                                 key("float", 1.0f)
                                 key("double", 1.0)
                             }
-                            throw RuntimeException("Error forzado desde HomeScreen")
+                            throw RuntimeException("Forced error from HomeScreen")
                         },
                         modifier = Modifier.alpha(if (isButtonVisible) 1f else 0f)
                     ) {
@@ -329,7 +326,8 @@ sealed class BottomNavScreen(val route: String, val title: String, val icon: Ima
     object Contact : BottomNavScreen(
         route = "contact",
         title = "Contacts",
-        icon = Icons.Default.Person
+        //icon = Icons.Default.Person
+        icon = Icons.Default.Home
     )
     object Note : BottomNavScreen(
         route = "notes",

@@ -2,10 +2,13 @@ package ca.centennial.finalproyect.model
 
 data class Contact(
     val key: String? = null,
-    val name: String = "",
+    var name: String = "",
     val email: String = "",
-    val phoneNumber: String = "",
-    val uid: String = "",
-    val city: String =  "",
-    val country: String = ""
+    var phoneNumber: String = "",
+    var uid: String = "",
+    var city: String =  "",
+    var country: String = "",
+    var lastName: String = "",
+    var peso: Double = 0.0,
+    var estatura: Double = 0.0
 )
