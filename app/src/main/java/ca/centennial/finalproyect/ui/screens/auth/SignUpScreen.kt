@@ -53,6 +53,12 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    var dateOfBirth by remember { mutableStateOf("") }
+    var gender by remember { mutableStateOf("") }
+    var weight by remember { mutableStateOf("") }
+    var height by remember { mutableStateOf("") }
 
     val scope = rememberCoroutineScope()
 
@@ -80,12 +86,54 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             onValueChange = { password = it })
 
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text("First Name") },
+            value = firstName,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onValueChange = { firstName = it })
+
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text("Last Name") },
+            value = lastName,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onValueChange = { lastName = it })
+
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text("Date of Birth") },
+            value = dateOfBirth,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onValueChange = { dateOfBirth = it })
+
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text("Gender") },
+            value = gender,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onValueChange = { gender = it })
+
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text("Height") },
+            value = height,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onValueChange = { height = it })
+
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            label = { Text("Weight") },
+            value = weight,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onValueChange = { weight = it })
+
         Spacer(modifier = Modifier.height(30.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
                     scope.launch {
-                        signUp(email, password, auth, analytics, context, navigation)
+                        signUp(email, password, firstName, lastName, dateOfBirth, gender, height, weight, auth, analytics, context, navigation)
                     }
                 },
                 shape = RoundedCornerShape(50.dp),
@@ -116,14 +164,20 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
 private suspend fun signUp(
     email: String,
     password: String,
+    firstName: String,
+    lastName: String,
+    dateOfBirth: String,
+    gender: String,
+    height: String,
+    weight: String,
     auth: AuthManager,
     analytics: AnalyticsManager,
     context: Context,
     navigation: NavController
 ) {
 
-    if (email.isNotEmpty() && password.isNotEmpty()) {
-        when (val result = auth.createUserWithEmailAndPassword(email, password)) {
+    if (email.isNotEmpty() && password.isNotEmpty() && firstName.isNotEmpty() && lastName.isNotEmpty() && dateOfBirth.isNotEmpty() && gender.isNotEmpty() && height.isNotEmpty() && weight.isNotEmpty()) {
+        when (val result = auth.createUserWithEmailAndPassword(email, password, firstName, lastName, dateOfBirth, gender, height, weight)) {
             is AuthRes.Success -> {
                 analytics.logButtonClicked(FirebaseAnalytics.Event.SIGN_UP)
                 Toast.makeText(

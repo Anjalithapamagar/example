@@ -15,6 +15,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
@@ -39,41 +40,25 @@ class AuthManager(private val context: Context) {
     }
 
 
-
-    suspend fun createUserWithEmailAndPassword(email: String, password: String, contact: Contact): AuthRes<FirebaseUser?> {
-
+    suspend fun createUserWithEmailAndPassword(email: String, password: String, firstName: String, lastName: String, dateOfBirth: String, gender: String, weight: String, height: String): AuthRes<FirebaseUser?> {
         return try {
-            /*val displayName: String = "Camilo"
-            val lastName: String = "Meli"
-            val birthDate: String = "02/12/1982"
-            val height: Double = 175.00
-            val weight: Double = 130.00*/
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
-            val user = authResult.user
-           /* user?.let {
-                val profileUpdates = UserProfileChangeRequest.Builder()
-                    .setDisplayName("$displayName $lastName") // Nombre completo
-                    // Puedes agregar más campos al displayName si lo deseas
-                    .build()
-                it.updateProfile(profileUpdates).await()
-            }*/
-            //val userData = UserData(name, surname, dateOfBirth, height.toDouble(), weight.toDouble())
-            /*val userData = Contact()
-            userData.lastName = "Meli"
-            userData.name = "Camilo"
-            userData.estatura = 175.00
-            userData.peso = 130.00*/
-
-
-
-
-            Firebase.firestore.collection("users").document(authResult.user!!.uid).set(contact)
-
-
-
+            val uid = authResult.user?.uid
+            if (uid != null) {
+                val db = FirebaseFirestore.getInstance()
+                val userData = hashMapOf(
+                    "firstName" to firstName,
+                    "lastName" to lastName,
+                    "email" to email,
+                    "dateOfBirth" to dateOfBirth,
+                    "gender" to gender,
+                    "weight" to weight,
+                    "height" to height
+                )
+                db.collection("users").document(uid).set(userData).await()
+            }
             AuthRes.Success(authResult.user)
-
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             AuthRes.Error(e.message ?: "Error creating user")
         }
     }
