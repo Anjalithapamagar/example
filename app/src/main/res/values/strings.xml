@@ -60,4 +60,7 @@
     <string name="error_deleting_image">Error deleting image</string>
     <string name="force_error">Force Error</string>
 
+    <string name="delete_record">Delete Record</string>
+    <string name="are_you_sure_you_want_to_delete_record">Are you sure you want to delete record?</string>
+
 </resources>

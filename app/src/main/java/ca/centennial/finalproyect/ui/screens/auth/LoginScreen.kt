@@ -21,11 +21,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -103,7 +106,6 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
             }
         }
     }
-
     Box(modifier = Modifier.fillMaxSize()) {
         ClickableText(
             text = AnnotatedString(stringResource(R.string.you_do_dnot_dhave_daccount)),
@@ -128,22 +130,30 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_firebase),
-            contentDescription = "Firebase",
-            modifier = Modifier.size(100.dp)
+            painter = painterResource(id = R.drawable.nutrimate),
+            contentDescription = "NutriMate",
+            modifier = Modifier.size(500.dp)
         )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = "NUTRI-MATE APP",
-            style = TextStyle(fontSize = 30.sp))
-        Spacer(modifier = Modifier.height(30.dp))
-        TextField(
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Email,
+                    contentDescription = null
+                )
+            },
             label = { Text(text = stringResource(R.string.email)) },
             value = email,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             onValueChange = { email = it })
         Spacer(modifier = Modifier.height(10.dp))
-        TextField(
+        OutlinedTextField(
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = null
+                )
+            },
             label = { Text(text = stringResource(R.string.password)) },
             value = password,
             visualTransformation = PasswordVisualTransformation(),
@@ -157,9 +167,10 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
                         emailPassSignIn(email, password, auth, analytics, context, navigation)
                     }
                 },
-                shape = RoundedCornerShape(50.dp),
+                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
+
+                    .width(300.dp)
                     .height(50.dp)
             ) {
                 Text(text = stringResource(R.string.login).uppercase())

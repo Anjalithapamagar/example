@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -77,7 +76,7 @@ activated by a floating button (FloatingActionButton).
 Use LazyVerticalStaggeredGrid to display notes in a vertical grid with a staggered layout.
  */
 @Composable
-fun NotesScreen(firestore: FirestoreManager) {
+fun CalculatorScreen(firestore: FirestoreManager) {
 /*
 var showAddNoteDialog by remember { mutableStateOf(false) }
 
@@ -119,7 +118,7 @@ mutableStateOf and update the UI every time the value changes.
     ) {
         if(!notes.isNullOrEmpty()) {
             LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2),
+                columns = StaggeredGridCells.Fixed(1),
                 contentPadding = PaddingValues(4.dp)
             ) {
                 notes.forEach {
@@ -178,20 +177,23 @@ fun NoteItem(note: Note, firestore: FirestoreManager) {
         ) {
             Text(text = note.title,
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,)
+                fontSize = 24.sp,)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = note.content,
-                fontWeight = FontWeight.Thin,
-                fontSize = 13.sp,
+            Text(text = "Weight: ${note.weight}",
+                fontWeight = FontWeight.Medium,
+                fontSize = 20.sp,
                 lineHeight = 15.sp)
-            Text(text = note.bmiResult,
-                fontWeight = FontWeight.Thin,
-                fontSize = 13.sp,
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "BMI: ${note.bmiResult} ",
+                fontWeight = FontWeight.Medium,
+                fontSize = 20.sp,
                 lineHeight = 15.sp)
-            Text(text = note.bmiCategory,
-                fontWeight = FontWeight.Thin,
-                fontSize = 13.sp,
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Category: ${note.bmiCategory}",
+                fontWeight = FontWeight.Medium,
+                fontSize = 20.sp,
                 lineHeight = 15.sp)
+            Spacer(modifier = Modifier.height(8.dp))
             IconButton(
                 onClick = { showDeleteNoteDialog = true },
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
@@ -218,7 +220,6 @@ Contains input fields for the title and content of the note. Pressing the "Add" 
 @Composable
 fun AddNoteDialog(onNoteAdded: (Note) -> Unit, onDialogDismissed: () -> Unit) {
     var title by remember { mutableStateOf("") }
-    var content by remember { mutableStateOf("") }
     var height by remember { mutableStateOf("") }
     var weight by remember { mutableStateOf("") }
     var bmiResult by remember { mutableStateOf("") }
@@ -234,12 +235,11 @@ fun AddNoteDialog(onNoteAdded: (Note) -> Unit, onDialogDismissed: () -> Unit) {
                         val weightValue = weight.toFloat()
                         val heightValue = height.toFloat()
                         val bmi = calculateBMI(weightValue, heightValue)
-                        bmiResult = "Your BMI is: $bmi"
+                        bmiResult = bmi.toString()
                         bmiCategory = getBMICategory(bmi)
                     }
                     val newNote = Note(
                         title = title,
-                        content = content,
                         height = height,
                         weight = weight,
                         bmiResult = bmiResult,
@@ -247,7 +247,6 @@ fun AddNoteDialog(onNoteAdded: (Note) -> Unit, onDialogDismissed: () -> Unit) {
                         )
                     onNoteAdded(newNote)
                     title = ""
-                    content = ""
                     height = ""
                     weight = ""
                 }
@@ -274,21 +273,9 @@ fun AddNoteDialog(onNoteAdded: (Note) -> Unit, onDialogDismissed: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    value = content,
-                    onValueChange = { content = it },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-                    maxLines = 4,
-                    label = { Text(text = stringResource(R.string.content)) }
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                TextField(
                     value = height,
                     onValueChange = { height = it },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-                    maxLines = 4,
                     label = { Text("Height in (Meters)") }
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -296,7 +283,6 @@ fun AddNoteDialog(onNoteAdded: (Note) -> Unit, onDialogDismissed: () -> Unit) {
                     value = weight,
                     onValueChange = { weight = it },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-                    maxLines = 4,
                     label = { Text("Weight in (Kilograms)") }
                 )
             }
@@ -321,8 +307,8 @@ fun getBMICategory(bmi: Float): String {
 fun DeleteNoteDialog(onConfirmDelete: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.delete_note)) },
-        text = { Text(stringResource(R.string.are_you_sure_you_want_to_delete_the_note)) },
+        title = { Text(stringResource(R.string.delete_record)) },
+        text = { Text(stringResource(R.string.are_you_sure_you_want_to_delete_record)) },
         confirmButton = {
             Button(
                 onClick = onConfirmDelete

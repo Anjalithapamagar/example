@@ -21,9 +21,12 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -106,11 +109,14 @@ fun CloudStorageScreen(storage: CloudStorageManager) {
                     }
                 },
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(R.string.add_photo))
+                Icon(imageVector = Icons.Default.Search, contentDescription = stringResource(R.string.add_photo))
             }
         }
     ) { contentPadding ->
         Box(modifier = Modifier.padding(contentPadding)) {
+
+            var searchText by remember { mutableStateOf("") }
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -119,6 +125,17 @@ fun CloudStorageScreen(storage: CloudStorageManager) {
                 LaunchedEffect(Unit) {
                     gallery = storage.getUserImages()
                 }
+
+                OutlinedTextField(
+                    value = searchText,
+                    onValueChange = { searchText = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    label = { Text("Search") },
+                    singleLine = true
+                )
+
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     modifier = Modifier.fillMaxSize()

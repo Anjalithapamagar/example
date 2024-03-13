@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -40,6 +41,7 @@ import ca.centennial.finalproyect.R
 import com.google.firebase.analytics.FirebaseAnalytics
 import ca.centennial.finalproyect.ui.navigation.Routes
 import ca.centennial.finalproyect.ui.theme.Purple40
+import ca.centennial.finalproyect.ui.theme.green
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.AuthRes
@@ -68,11 +70,11 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Ceate Account",
-            style = TextStyle(fontSize = 40.sp, color = Purple40)
+            text = "Create an Account",
+            style = TextStyle(fontSize = 30.sp, color = green)
         )
-        Spacer(modifier = Modifier.height(50.dp))
-        TextField(
+        Spacer(modifier = Modifier.height(40.dp))
+        OutlinedTextField(
             label = { Text(text = stringResource(R.string.email)) },
             value = email,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),

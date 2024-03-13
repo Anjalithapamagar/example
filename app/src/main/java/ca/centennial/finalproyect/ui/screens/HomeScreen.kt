@@ -15,9 +15,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.AlertDialog
@@ -58,7 +59,8 @@ import androidx.navigation.compose.rememberNavController
 import ca.centennial.finalproyect.R
 import ca.centennial.finalproyect.ui.navigation.Routes
 import ca.centennial.finalproyect.ui.screens.db.ContactsScreen
-import ca.centennial.finalproyect.ui.screens.db.NotesScreen
+import ca.centennial.finalproyect.ui.screens.db.CalculatorScreen
+import ca.centennial.finalproyect.ui.screens.db.DailyMealPlanScreen
 import ca.centennial.finalproyect.ui.screens.storage.CloudStorageScreen
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
@@ -121,7 +123,7 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                                     .data(user?.photoUrl)
                                     .crossfade(true)
                                     .build(),
-                                contentDescription = "Imagen",
+                                contentDescription = "Image",
                                 placeholder = painterResource(id = R.drawable.profile),
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -268,9 +270,11 @@ fun LogoutDialog(onConfirmLogout: () -> Unit, onDismiss: () -> Unit) {
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
-        BottomNavScreen.Contact,
-        BottomNavScreen.Note,
-        BottomNavScreen.Photos,
+        BottomNavScreen.Home,
+        BottomNavScreen.Calculator,
+        BottomNavScreen.Community,
+        BottomNavScreen.Scan,
+        BottomNavScreen.Profile,
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -309,34 +313,47 @@ fun BottomNavGraph(navController: NavHostController, context: Context, authManag
     val realtime = RealtimeManager(context)
     val firestore = FirestoreManager(context)
     val storage = CloudStorageManager(context)
-    NavHost(navController = navController, startDestination = BottomNavScreen.Contact.route) {
-        composable(route = BottomNavScreen.Contact.route) {
-            ContactsScreen(realtime = realtime, authManager = authManager)
+    NavHost(navController = navController, startDestination = BottomNavScreen.Home.route) {
+        composable(route = BottomNavScreen.Home.route) {
+            DailyMealPlanScreen(realtime = realtime, authManager = authManager)
         }
-        composable(route = BottomNavScreen.Note.route) {
-            NotesScreen(firestore = firestore)
+        composable(route = BottomNavScreen.Calculator.route) {
+            CalculatorScreen(firestore = firestore)
         }
-        composable(route = BottomNavScreen.Photos.route) {
+        composable(route = BottomNavScreen.Scan.route) {
             CloudStorageScreen(storage = storage)
         }
     }
 }
 
 sealed class BottomNavScreen(val route: String, val title: String, val icon: ImageVector) {
-    object Contact : BottomNavScreen(
-        route = "contact",
-        title = "Contacts",
+    object Community : BottomNavScreen(
+        route = "community",
+        title = "Community",
+        icon = Icons.Default.Send
+    )
+    object Home : BottomNavScreen(
+        route = "home",
+        title = "Home",
         //icon = Icons.Default.Person
         icon = Icons.Default.Home
     )
-    object Note : BottomNavScreen(
-        route = "notes",
-        title = "BMI Calculator",
+    object Calculator : BottomNavScreen(
+        route = "calculator",
+        title = "Calculator",
         icon = Icons.Default.AddCircle
     )
-    object Photos : BottomNavScreen(
-        route = "photos",
-        title = "Photos",
-        icon = Icons.Default.Face
+
+    object Scan : BottomNavScreen(
+        route = "scan",
+        title = "Scan",
+        icon = Icons.Default.Search
     )
+
+    object Profile : BottomNavScreen(
+        route = "profile",
+        title = "Profile",
+        icon = Icons.Default.Person
+    )
+
 }

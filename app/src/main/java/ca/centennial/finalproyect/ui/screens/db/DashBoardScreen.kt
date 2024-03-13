@@ -36,7 +36,7 @@ fun DailyMealPlanScreen(realtime: RealtimeManager, authManager: AuthManager) {
             .background(Color.DarkGray)
     ) {
         Text(
-            text = "Welcome Anjali",
+            text = "Welcome User",
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()

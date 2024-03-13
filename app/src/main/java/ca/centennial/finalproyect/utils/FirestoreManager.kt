@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class FirestoreManager(context: Context) {
+
     private val firestore = FirebaseFirestore.getInstance()
 
     private val auth = AuthManager(context)
