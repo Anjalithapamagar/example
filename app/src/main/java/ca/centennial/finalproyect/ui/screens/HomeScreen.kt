@@ -58,8 +58,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ca.centennial.finalproyect.R
 import ca.centennial.finalproyect.ui.navigation.Routes
-import ca.centennial.finalproyect.ui.screens.db.ContactsScreen
-import ca.centennial.finalproyect.ui.screens.db.CalculatorScreen
+import ca.centennial.finalproyect.ui.screens.db.TrackerScreen
 import ca.centennial.finalproyect.ui.screens.db.DailyMealPlanScreen
 import ca.centennial.finalproyect.ui.screens.storage.CloudStorageScreen
 import ca.centennial.finalproyect.utils.AnalyticsManager
@@ -124,14 +123,14 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                                     .crossfade(true)
                                     .build(),
                                 contentDescription = "Image",
-                                placeholder = painterResource(id = R.drawable.profile),
+                                placeholder = painterResource(id = R.drawable.profileplaceholder),
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
                                     .clip(CircleShape)
                                     .size(40.dp))
                         } else {
                             Image(
-                                painter = painterResource(R.drawable.profile),
+                                painter = painterResource(R.drawable.profileplaceholder),
                                 contentDescription = "Default profile photo",
                                 modifier = Modifier
                                     .padding(end = 8.dp)
@@ -271,7 +270,7 @@ fun LogoutDialog(onConfirmLogout: () -> Unit, onDismiss: () -> Unit) {
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         BottomNavScreen.Home,
-        BottomNavScreen.Calculator,
+        BottomNavScreen.Tracker,
         BottomNavScreen.Community,
         BottomNavScreen.Scan,
         BottomNavScreen.Profile,
@@ -317,8 +316,8 @@ fun BottomNavGraph(navController: NavHostController, context: Context, authManag
         composable(route = BottomNavScreen.Home.route) {
             DailyMealPlanScreen(realtime = realtime, authManager = authManager)
         }
-        composable(route = BottomNavScreen.Calculator.route) {
-            CalculatorScreen(firestore = firestore)
+        composable(route = BottomNavScreen.Tracker.route) {
+            TrackerScreen(firestore = firestore)
         }
         composable(route = BottomNavScreen.Scan.route) {
             CloudStorageScreen(storage = storage)
@@ -338,9 +337,9 @@ sealed class BottomNavScreen(val route: String, val title: String, val icon: Ima
         //icon = Icons.Default.Person
         icon = Icons.Default.Home
     )
-    object Calculator : BottomNavScreen(
-        route = "calculator",
-        title = "Calculator",
+    object Tracker : BottomNavScreen(
+        route = "tracker",
+        title = "Tracker",
         icon = Icons.Default.AddCircle
     )
 

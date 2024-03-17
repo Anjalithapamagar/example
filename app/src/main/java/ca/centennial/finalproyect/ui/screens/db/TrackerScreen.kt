@@ -76,7 +76,7 @@ activated by a floating button (FloatingActionButton).
 Use LazyVerticalStaggeredGrid to display notes in a vertical grid with a staggered layout.
  */
 @Composable
-fun CalculatorScreen(firestore: FirestoreManager) {
+fun TrackerScreen(firestore: FirestoreManager) {
 /*
 var showAddNoteDialog by remember { mutableStateOf(false) }
 

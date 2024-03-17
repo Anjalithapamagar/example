@@ -3,7 +3,6 @@ package ca.centennial.finalproyect.utils
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import ca.centennial.finalproyect.model.Contact
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -16,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
@@ -40,7 +38,17 @@ class AuthManager(private val context: Context) {
     }
 
 
-    suspend fun createUserWithEmailAndPassword(email: String, password: String, firstName: String, lastName: String, dateOfBirth: String, gender: String, weight: String, height: String): AuthRes<FirebaseUser?> {
+    suspend fun createUserWithEmailAndPassword(email: String,
+                                               password: String,
+                                               firstName: String,
+                                               lastName: String,
+                                               dateOfBirth: String,
+                                               gender: String,
+                                               height: Double,
+                                               weight: Double,
+                                               initialBMI: Double,
+                                               currentBMI: Double,
+                                               bmiCategory: String): AuthRes<FirebaseUser?> {
         return try {
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
             val uid = authResult.user?.uid
@@ -52,8 +60,11 @@ class AuthManager(private val context: Context) {
                     "email" to email,
                     "dateOfBirth" to dateOfBirth,
                     "gender" to gender,
+                    "height" to height,
                     "weight" to weight,
-                    "height" to height
+                    "initialBMI" to initialBMI,
+                    "currentBMI" to currentBMI,
+                    "bmiCategory" to bmiCategory
                 )
                 db.collection("users").document(uid).set(userData).await()
             }
@@ -136,9 +147,6 @@ class AuthManager(private val context: Context) {
         val signInIntent = googleSignInClient.signInIntent
         googleSignInLauncher.launch(signInIntent)
     }
-
-
-
 
 
 }

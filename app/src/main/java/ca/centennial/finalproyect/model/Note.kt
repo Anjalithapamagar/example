@@ -9,5 +9,4 @@ data class Note(
     val weight: String = "",
     val bmiResult: String = "",
     val bmiCategory: String = ""
-
 )

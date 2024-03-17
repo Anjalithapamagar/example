@@ -59,8 +59,11 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
     var lastName by remember { mutableStateOf("") }
     var dateOfBirth by remember { mutableStateOf("") }
     var gender by remember { mutableStateOf("") }
-    var weight by remember { mutableStateOf("") }
-    var height by remember { mutableStateOf("") }
+    var weight by remember { mutableStateOf(0.0) }
+    var height by remember { mutableStateOf(0.0) }
+    var initialBMI by remember { mutableStateOf(0.0) }
+    var currentBMI by remember { mutableStateOf(0.0) }
+    var bmiCategory by remember { mutableStateOf("") }
 
     val scope = rememberCoroutineScope()
 
@@ -119,23 +122,29 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
             label = { Text("Height") },
-            value = height,
+            value = height.toString(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            onValueChange = { height = it })
+            onValueChange = { newValue ->
+                height = newValue.toDoubleOrNull() ?: 0.0
+            }
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
             label = { Text("Weight") },
-            value = weight,
+            value = weight.toString(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            onValueChange = { weight = it })
+            onValueChange = { newValue ->
+                weight = newValue.toDoubleOrNull() ?: 0.0
+            }
+        )
 
         Spacer(modifier = Modifier.height(30.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
                     scope.launch {
-                        signUp(email, password, firstName, lastName, dateOfBirth, gender, height, weight, auth, analytics, context, navigation)
+                        signUp(email, password, firstName, lastName, dateOfBirth, gender, height, weight, initialBMI, currentBMI, bmiCategory, auth, analytics, context, navigation)
                     }
                 },
                 shape = RoundedCornerShape(50.dp),
@@ -170,16 +179,19 @@ private suspend fun signUp(
     lastName: String,
     dateOfBirth: String,
     gender: String,
-    height: String,
-    weight: String,
+    height: Double,
+    weight: Double,
+    initialBMI: Double,
+    currentBMI: Double,
+    bmiCategory: String,
     auth: AuthManager,
     analytics: AnalyticsManager,
     context: Context,
     navigation: NavController
 ) {
 
-    if (email.isNotEmpty() && password.isNotEmpty() && firstName.isNotEmpty() && lastName.isNotEmpty() && dateOfBirth.isNotEmpty() && gender.isNotEmpty() && height.isNotEmpty() && weight.isNotEmpty()) {
-        when (val result = auth.createUserWithEmailAndPassword(email, password, firstName, lastName, dateOfBirth, gender, height, weight)) {
+    if (email.isNotEmpty() && password.isNotEmpty() && firstName.isNotEmpty() && lastName.isNotEmpty() && dateOfBirth.isNotEmpty() && gender.isNotEmpty() && height > 0 && weight > 0) {
+        when (val result = auth.createUserWithEmailAndPassword(email, password, firstName, lastName, dateOfBirth, gender, height, weight, initialBMI, currentBMI, bmiCategory)) {
             is AuthRes.Success -> {
                 analytics.logButtonClicked(FirebaseAnalytics.Event.SIGN_UP)
                 Toast.makeText(

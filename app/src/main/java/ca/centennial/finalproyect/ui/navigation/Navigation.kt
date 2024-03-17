@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import ca.centennial.finalproyect.model.User
 import com.google.firebase.auth.FirebaseUser
 import ca.centennial.finalproyect.ui.screens.HomeScreen
 
@@ -13,6 +14,7 @@ import ca.centennial.finalproyect.ui.screens.Screen
 import ca.centennial.finalproyect.ui.screens.auth.ForgotPasswordScreen
 import ca.centennial.finalproyect.ui.screens.auth.LoginScreen
 import ca.centennial.finalproyect.ui.screens.auth.SignUpScreen
+//import ca.centennial.finalproyect.ui.screens.auth.SignUpScreen
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 

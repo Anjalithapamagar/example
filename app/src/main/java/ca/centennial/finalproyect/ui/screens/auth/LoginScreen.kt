@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,10 +26,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -120,7 +123,7 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
                 fontSize = 14.sp,
                 fontFamily = FontFamily.Default,
                 textDecoration = TextDecoration.Underline,
-                color = Purple40
+                color = Color(0xFF1B5E20)
             )
         )
     }
@@ -130,7 +133,7 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.nutrimate),
+            painter = painterResource(id = R.drawable.nutrimatelogo),
             contentDescription = "NutriMate",
             modifier = Modifier.size(500.dp)
         )
@@ -142,10 +145,16 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
                     contentDescription = null
                 )
             },
-            label = { Text(text = stringResource(R.string.email)) },
+            label = { Text(text = stringResource(R.string.email),
+                style = TextStyle(Color(0xFF1B5E20))) },
             value = email,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            onValueChange = { email = it })
+            onValueChange = { email = it },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+            ))
+
         Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
             leadingIcon = {
@@ -154,24 +163,32 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
                     contentDescription = null
                 )
             },
-            label = { Text(text = stringResource(R.string.password)) },
+            label = { Text(text = stringResource(R.string.password),
+                    style = TextStyle(Color(0xFF1B5E20))) },
             value = password,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = { password = it })
+            onValueChange = { password = it },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+            ))
         Spacer(modifier = Modifier.height(20.dp))
-        Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
+        Box(modifier = Modifier.padding(65.dp, 0.dp, 65.dp, 0.dp)) {
             Button(
                 onClick = {
                     scope.launch {
                         emailPassSignIn(email, password, auth, analytics, context, navigation)
                     }
                 },
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
-
                     .width(300.dp)
-                    .height(50.dp)
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(
+                    Color(0xFF2E7D32)
+                )
+
             ) {
                 Text(text = stringResource(R.string.login).uppercase())
             }
@@ -189,7 +206,7 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
                 fontSize = 14.sp,
                 fontFamily = FontFamily.Default,
                 textDecoration = TextDecoration.Underline,
-                color = Purple40
+                color = Color(0xFF1B5E20)
             )
         )
         /* Spacer(modifier = Modifier.height(25.dp))
