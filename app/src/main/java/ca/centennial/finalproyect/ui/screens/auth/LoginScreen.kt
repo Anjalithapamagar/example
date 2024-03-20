@@ -6,7 +6,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -55,7 +54,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ca.centennial.finalproyect.R
 import ca.centennial.finalproyect.ui.navigation.Routes
-import ca.centennial.finalproyect.ui.theme.Purple40
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.AuthRes
@@ -73,7 +71,7 @@ Arguments:
 @analytics: An AnalyticsManager object for tracking and logging analytics.
 @auth: An object of type AuthManager to manage user authentication.
 @navigation: An object of type NavController to control navigation between screens.
- */
+*/
 @Composable
 fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavController) {
     analytics.logScreenView(screenName = Routes.Login.route)
@@ -87,7 +85,7 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
         contract = ActivityResultContracts.StartActivityForResult()) { result ->
         when(val account = auth.handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(result.data))) {
             is AuthRes.Success -> {
-                val credential = GoogleAuthProvider.getCredential(account?.data?.idToken, null)
+                val credential = GoogleAuthProvider.getCredential(account.data.idToken, null)
                 scope.launch {
                     val fireUser = auth.signInWithGoogleCredential(credential)
                     if (fireUser != null){
@@ -109,23 +107,32 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
             }
         }
     }
+
     Box(modifier = Modifier.fillMaxSize()) {
-        ClickableText(
-            text = AnnotatedString(stringResource(R.string.you_do_dnot_dhave_daccount)),
+        Row(
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.Center,
             modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 40.dp)
                 .align(Alignment.BottomCenter)
-                .padding(40.dp),
-            onClick = {
-                navigation.navigate(Routes.SignUp.route)
-                analytics.logButtonClicked("Click: You do not have an account? Sign up")
-            },
-            style = TextStyle(
-                fontSize = 14.sp,
-                fontFamily = FontFamily.Default,
-                textDecoration = TextDecoration.Underline,
-                color = Color(0xFF1B5E20)
+        ) {
+            Spacer(modifier = Modifier.width(4.dp))
+            ClickableText(
+                text = AnnotatedString(stringResource(R.string.you_do_dnot_dhave_daccount)),
+                modifier = Modifier.padding(end = 8.dp),
+                onClick = {
+                    navigation.navigate(Routes.SignUp.route)
+                    analytics.logButtonClicked("Click: Sign Up")
+                },
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.Default,
+                    textDecoration = TextDecoration.Underline,
+                    color = Color(0xFF1B5E20)
+                )
             )
-        )
+        }
     }
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -135,7 +142,7 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
         Image(
             painter = painterResource(id = R.drawable.nutrimatelogo),
             contentDescription = "NutriMate",
-            modifier = Modifier.size(500.dp)
+            modifier = Modifier.size(200.dp)
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
@@ -164,7 +171,7 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
                 )
             },
             label = { Text(text = stringResource(R.string.password),
-                    style = TextStyle(Color(0xFF1B5E20))) },
+                style = TextStyle(Color(0xFF1B5E20))) },
             value = password,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -173,7 +180,7 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
                 focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
                 unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
             ))
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(40.dp))
         Box(modifier = Modifier.padding(65.dp, 0.dp, 65.dp, 0.dp)) {
             Button(
                 onClick = {
@@ -193,14 +200,15 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
                 Text(text = stringResource(R.string.login).uppercase())
             }
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         ClickableText(
             text = AnnotatedString(stringResource(R.string.forget_pass)),
             onClick = {
-                navigation.navigate(Routes.ForgotPassword.route) {
+                navigation.navigate(Routes.ForgotPassword
+                    .route) {
                     popUpTo(Routes.Login.route) { inclusive = true }
                 }
-                analytics.logButtonClicked("Click: Did you forget your password?")
+                analytics.logButtonClicked("Click: Forgot Password?")
             },
             style = TextStyle(
                 fontSize = 14.sp,

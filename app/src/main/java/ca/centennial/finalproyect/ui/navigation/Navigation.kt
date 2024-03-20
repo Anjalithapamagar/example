@@ -17,6 +17,7 @@ import ca.centennial.finalproyect.ui.screens.auth.SignUpScreen
 //import ca.centennial.finalproyect.ui.screens.auth.SignUpScreen
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
+import ca.centennial.finalproyect.utils.ProfileViewModel
 
 @Composable
 fun Navigation(context: Context, navController: NavHostController = rememberNavController()) {
@@ -41,7 +42,9 @@ fun Navigation(context: Context, navController: NavHostController = rememberNavC
                 HomeScreen(
                     analytics = analytics,
                     auth = authManager,
-                    navigation = navController)
+                    navigation = navController,
+                    profileViewModel = ProfileViewModel()
+                )
             }
             composable(Routes.SignUp.route) {
                 SignUpScreen(

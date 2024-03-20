@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,14 +58,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ca.centennial.finalproyect.R
+import ca.centennial.finalproyect.model.User
 import ca.centennial.finalproyect.ui.navigation.Routes
 import ca.centennial.finalproyect.ui.screens.db.TrackerScreen
 import ca.centennial.finalproyect.ui.screens.db.DailyMealPlanScreen
+import ca.centennial.finalproyect.ui.screens.db.ProfileScreen
 import ca.centennial.finalproyect.ui.screens.storage.CloudStorageScreen
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.CloudStorageManager
 import ca.centennial.finalproyect.utils.FirestoreManager
+import ca.centennial.finalproyect.utils.ProfileViewModel
 import ca.centennial.finalproyect.utils.RealtimeManager
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -87,7 +91,7 @@ val WELCOME_MESSAGE_KEY = "welcome_message"
 val IS_BUTTON_VISIBLE_KEY = "is_button_visible"
 
 @Composable
-fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavController) {
+fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavController, profileViewModel: ProfileViewModel) {
     analytics.logScreenView(screenName = Routes.Home.route)
     val navController = rememberNavController()
 
@@ -98,6 +102,17 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
     var showDialog by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+
+    val profileViewModel = remember { ProfileViewModel() }
+    var userData by remember { mutableStateOf(User()) }
+
+    LaunchedEffect(key1 = true) {
+        auth.getCurrentUser()?.uid?.let { userId ->
+            profileViewModel.getUserData(userId, context) { user ->
+                userData = user
+            }
+        }
+    }
 
     val onLogoutConfirmed: () -> Unit = {
         auth.signOut()
@@ -141,7 +156,11 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                         Spacer(modifier = Modifier.width(10.dp))
                         Column {
                             Text(
-                                text = if(!user?.displayName.isNullOrEmpty()) "Hi ${user?.displayName}" else welcomeMessage,
+                                text = if (userData.firstName.isNotEmpty() && userData.lastName.isNotEmpty()) {
+                                    "Hi ${userData.firstName} ${userData.lastName}"
+                                } else {
+                                    welcomeMessage
+                                },
                                 fontSize = 20.sp,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
@@ -321,6 +340,9 @@ fun BottomNavGraph(navController: NavHostController, context: Context, authManag
         }
         composable(route = BottomNavScreen.Scan.route) {
             CloudStorageScreen(storage = storage)
+        }
+        composable(route = BottomNavScreen.Profile.route) {
+            ProfileScreen(profileViewModel = ProfileViewModel(), authManager = authManager)
         }
     }
 }

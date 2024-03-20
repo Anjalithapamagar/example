@@ -37,7 +37,6 @@ class AuthManager(private val context: Context) {
         }
     }
 
-
     suspend fun createUserWithEmailAndPassword(email: String,
                                                password: String,
                                                firstName: String,
@@ -55,6 +54,7 @@ class AuthManager(private val context: Context) {
             if (uid != null) {
                 val db = FirebaseFirestore.getInstance()
                 val userData = hashMapOf(
+                    "uid" to uid,
                     "firstName" to firstName,
                     "lastName" to lastName,
                     "email" to email,
@@ -147,6 +147,4 @@ class AuthManager(private val context: Context) {
         val signInIntent = googleSignInClient.signInIntent
         googleSignInLauncher.launch(signInIntent)
     }
-
-
 }

@@ -22,7 +22,7 @@
     <!--Config TEXT for Home  -->
     <string name="welcome">Welcome</string>
     <!--Config TEXT for Login Screen -->
-    <string name="you_do_dnot_dhave_daccount">You do not have an account?, Sign up</string>
+    <string name="you_do_dnot_dhave_daccount">You do not have an account? Sign up</string>
     <string name="login">Log in</string>
     <string name="forget_pass">Did you forget your password?</string>
     <string name="continue_as_guest">Continue as a guest</string>
@@ -62,5 +62,6 @@
 
     <string name="delete_record">Delete Record</string>
     <string name="are_you_sure_you_want_to_delete_record">Are you sure you want to delete record?</string>
+    <string name="signup">Sign Up\n</string>
 
 </resources>

@@ -1,7 +1,12 @@
 package ca.centennial.finalproyect.ui.screens.auth
 
+
+import android.app.DatePickerDialog
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,10 +15,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -25,8 +39,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -37,20 +54,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ca.centennial.finalproyect.R
-
-import com.google.firebase.analytics.FirebaseAnalytics
 import ca.centennial.finalproyect.ui.navigation.Routes
 import ca.centennial.finalproyect.ui.theme.Purple40
+import ca.centennial.finalproyect.ui.theme.PurpleGrey40
 import ca.centennial.finalproyect.ui.theme.green
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.AuthRes
-
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
+import java.util.Calendar
+
 
 @Composable
 fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavController) {
     analytics.logScreenView(screenName = Routes.SignUp.route)
+
 
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
@@ -65,112 +84,229 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
     var currentBMI by remember { mutableStateOf(0.0) }
     var bmiCategory by remember { mutableStateOf("") }
 
+
     val scope = rememberCoroutineScope()
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        Text(
-            text = "Create an Account",
-            style = TextStyle(fontSize = 30.sp, color = green)
-        )
-        Spacer(modifier = Modifier.height(40.dp))
-        OutlinedTextField(
-            label = { Text(text = stringResource(R.string.email)) },
-            value = email,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            onValueChange = { email = it })
-
-        Spacer(modifier = Modifier.height(20.dp))
-        TextField(
-            label = { Text(text = stringResource(R.string.password)) },
-            value = password,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = { password = it })
-
-        Spacer(modifier = Modifier.height(20.dp))
-        TextField(
-            label = { Text("First Name") },
-            value = firstName,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onValueChange = { firstName = it })
-
-        Spacer(modifier = Modifier.height(20.dp))
-        TextField(
-            label = { Text("Last Name") },
-            value = lastName,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onValueChange = { lastName = it })
-
-        Spacer(modifier = Modifier.height(20.dp))
-        TextField(
-            label = { Text("Date of Birth") },
-            value = dateOfBirth,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onValueChange = { dateOfBirth = it })
-
-        Spacer(modifier = Modifier.height(20.dp))
-        TextField(
-            label = { Text("Gender") },
-            value = gender,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onValueChange = { gender = it })
-
-        Spacer(modifier = Modifier.height(20.dp))
-        TextField(
-            label = { Text("Height") },
-            value = height.toString(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            onValueChange = { newValue ->
-                height = newValue.toDoubleOrNull() ?: 0.0
-            }
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-        TextField(
-            label = { Text("Weight") },
-            value = weight.toString(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            onValueChange = { newValue ->
-                weight = newValue.toDoubleOrNull() ?: 0.0
-            }
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-        Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
-            Button(
-                onClick = {
-                    scope.launch {
-                        signUp(email, password, firstName, lastName, dateOfBirth, gender, height, weight, initialBMI, currentBMI, bmiCategory, auth, analytics, context, navigation)
-                    }
-                },
-                shape = RoundedCornerShape(50.dp),
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.nutrimatelogo),
+                contentDescription = "NutriMate",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text(text = stringResource(R.string.check_in))
-            }
-        }
-
-        Spacer(modifier = Modifier.height(40.dp))
-        ClickableText(
-            text = AnnotatedString(stringResource(R.string.do_you_already_have_account)),
-            onClick = {
-                navigation.popBackStack()
-            },
-            style = TextStyle(
-                fontSize = 14.sp,
-                fontFamily = FontFamily.Default,
-                textDecoration = TextDecoration.Underline,
-                color = Purple40
+                    .size(200.dp)
+                    .padding(bottom = 20.dp)
             )
-        )
+            Text(
+                text = "Create an Account",
+                style = TextStyle(fontSize = 20.sp, color = Color(0xFF2E7D32))
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+
+
+            // Abc Section (Email and Password)
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                OutlinedTextField(
+                    label = { Text(text = stringResource(R.string.email)) },
+                    value = email,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    onValueChange = { email = it }
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                TextField(
+                    label = { Text(text = stringResource(R.string.password)) },
+                    value = password,
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    onValueChange = { password = it }
+                )
+            }
+
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+
+            // Basic Info Section (First Name, Last Name, Date of Birth, Gender)
+
+
+            Text(
+                text = "Basic Info Section",
+                style = TextStyle(fontSize = 12.sp, color = PurpleGrey40)
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TextField(
+                    label = { Text("First Name") },
+                    value = firstName,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    onValueChange = { firstName = it }
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                TextField(
+                    label = { Text("Last Name") },
+                    value = lastName,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    onValueChange = { lastName = it }
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                // Date of Birth
+                OutlinedTextField(
+                    value = dateOfBirth,
+                    onValueChange = { /* Ignored */ },
+                    label = { Text("Date of Birth") },
+                    readOnly = true,
+                    trailingIcon = {
+                        Icon(Icons.Default.DateRange, contentDescription = "Select Date",
+                            modifier = Modifier.clickable {
+                                showDatePicker(context) { selectedDate ->
+                                    dateOfBirth = selectedDate
+                                }
+                            })
+                    }
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                // Gender
+                OutlinedTextField(
+                    label = { Text("Gender") },
+                    value = gender,
+                    onValueChange = { /* Ignored */ },
+                    readOnly = true,
+                    trailingIcon = {
+                        Icon(Icons.Default.ArrowDropDown, contentDescription = "Expand Gender Menu")
+                    },
+                    modifier = Modifier.clickable {
+                        // Show gender menu
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(40.dp))
+            Text(
+                text = "Body Measurements",
+                style = TextStyle(fontSize = 12.sp, color = PurpleGrey40)
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+
+
+
+
+            // Body Info Section (Height and Weight)
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TextField(
+                    label = { Text("Height") },
+                    value = height.toString(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = { newValue ->
+                        height = newValue.toDoubleOrNull() ?: 0.0
+                    }
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                TextField(
+                    label = { Text("Weight") },
+                    value = weight.toString(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = { newValue ->
+                        weight = newValue.toDoubleOrNull() ?: 0.0
+                    }
+                )
+            }
+
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+
+            // Check-in Button
+            Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
+                Button(
+                    onClick = {
+                        scope.launch {
+                            signUp(
+                                email,
+                                password,
+                                firstName,
+                                lastName,
+                                dateOfBirth,
+                                gender,
+                                height,
+                                weight,
+                                initialBMI,
+                                currentBMI,
+                                bmiCategory,
+                                auth,
+                                analytics,
+                                context,
+                                navigation
+                            )
+                        }
+                    },
+                    shape = RoundedCornerShape(24.dp),
+                    modifier = Modifier
+                        .width(300.dp)
+                        .height(50.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        Color(0xFF2E7D32)
+                    )
+                ) {
+                    Text(text = stringResource(R.string.check_in))
+                }
+            }
+
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+
+            // Already have an account? ClickableText
+            ClickableText(
+                text = AnnotatedString(stringResource(R.string.do_you_already_have_account)),
+                onClick = {
+                    navigation.popBackStack()
+                },
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.Default,
+                    textDecoration = TextDecoration.Underline,
+                    color = Color(0xFF2E7D32)
+                )
+            )
+        }
     }
 }
+
+
+fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+
+    val datePickerDialog = DatePickerDialog(context,
+        { _, selectedYear, selectedMonth, selectedDay ->
+            val selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
+            onDateSelected(selectedDate)
+        }, year, month, day)
+
+
+    datePickerDialog.show()
+}
+
 
 private suspend fun signUp(
     email: String,
@@ -190,6 +326,7 @@ private suspend fun signUp(
     navigation: NavController
 ) {
 
+
     if (email.isNotEmpty() && password.isNotEmpty() && firstName.isNotEmpty() && lastName.isNotEmpty() && dateOfBirth.isNotEmpty() && gender.isNotEmpty() && height > 0 && weight > 0) {
         when (val result = auth.createUserWithEmailAndPassword(email, password, firstName, lastName, dateOfBirth, gender, height, weight, initialBMI, currentBMI, bmiCategory)) {
             is AuthRes.Success -> {
@@ -200,6 +337,7 @@ private suspend fun signUp(
                 ).show()
                 navigation.popBackStack()
             }
+
 
             is AuthRes.Error -> {
                 analytics.logButtonClicked("Error SignUp: ${result.errorMessage}")
@@ -214,3 +352,4 @@ private suspend fun signUp(
         ).show()
     }
 }
+

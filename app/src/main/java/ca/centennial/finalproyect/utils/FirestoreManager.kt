@@ -33,12 +33,6 @@ class FirestoreManager(context: Context) {
         noteRef.delete().await()
     }
 
-    suspend fun getUser(userId: String): User? {
-        val userDoc = firestore.collection("users").document(userId).get().await()
-        return userDoc.toObject(User::class.java)
-    }
-
-
     fun getNotesFlow(): Flow<List<Note>> = callbackFlow {
         val notesRef = firestore.collection("notes")
             .whereEqualTo("userId", userId).orderBy("title")
