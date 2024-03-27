@@ -1,5 +1,6 @@
 package ca.centennial.finalproyect.ui.screens
 
+import CommunityPosts
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -344,6 +345,10 @@ fun BottomNavGraph(navController: NavHostController, context: Context, authManag
         composable(route = BottomNavScreen.Profile.route) {
             ProfileScreen(profileViewModel = ProfileViewModel(), authManager = authManager)
         }
+        composable(route = BottomNavScreen.Community.route) {
+            CommunityPosts()
+        }
+
     }
 }
 

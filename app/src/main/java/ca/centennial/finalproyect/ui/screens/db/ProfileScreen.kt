@@ -77,35 +77,19 @@ fun ProfileScreen( profileViewModel: ProfileViewModel, authManager: AuthManager)
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "${userData.firstName} ${userData.lastName}")
+            Text(text = "Name: ${userData.firstName} ${userData.lastName}")
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = userData.dateOfBirth)
+            Text(text = "Gender: ${userData.gender}")
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = userData.gender)
+            Text(text = "Height: ${userData.height.toString()}")
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = userData.height.toString())
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(text = userData.weight.toString())
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(text = userData.initialBMI.toString())
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(text = userData.currentBMI.toString())
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(text = userData.bmiCategory)
+            Text(text = "Weight: ${userData.weight.toString()}")
 
         }
     }
