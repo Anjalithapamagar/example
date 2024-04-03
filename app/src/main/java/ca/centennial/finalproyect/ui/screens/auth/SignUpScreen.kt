@@ -5,7 +5,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,14 +22,19 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -55,9 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ca.centennial.finalproyect.R
 import ca.centennial.finalproyect.ui.navigation.Routes
-import ca.centennial.finalproyect.ui.theme.Purple40
 import ca.centennial.finalproyect.ui.theme.PurpleGrey40
-import ca.centennial.finalproyect.ui.theme.green
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.AuthRes
@@ -80,9 +81,9 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
     var gender by remember { mutableStateOf("") }
     var weight by remember { mutableStateOf(0.0) }
     var height by remember { mutableStateOf(0.0) }
-    var initialBMI by remember { mutableStateOf(0.0) }
-    var currentBMI by remember { mutableStateOf(0.0) }
-    var bmiCategory by remember { mutableStateOf("") }
+    val initialBMI by remember { mutableStateOf(0.0) }
+    val currentBMI by remember { mutableStateOf(0.0) }
+    val bmiCategory by remember { mutableStateOf("") }
 
 
     val scope = rememberCoroutineScope()
@@ -101,17 +102,12 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
         ) {
             Image(
                 painter = painterResource(id = R.drawable.nutrimatelogo),
-                contentDescription = "NutriMate",
+                contentDescription = "",
                 modifier = Modifier
                     .size(200.dp)
                     .padding(bottom = 20.dp)
             )
-            Text(
-                text = "Create an Account",
-                style = TextStyle(fontSize = 20.sp, color = Color(0xFF2E7D32))
-            )
             Spacer(modifier = Modifier.height(20.dp))
-
 
             // Abc Section (Email and Password)
             Column(
@@ -119,27 +115,46 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedTextField(
-                    label = { Text(text = stringResource(R.string.email)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Email,
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(text = stringResource(R.string.email),
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = email,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    onValueChange = { email = it }
+                    onValueChange = { email = it },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    )
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                TextField(
-                    label = { Text(text = stringResource(R.string.password)) },
+                OutlinedTextField(
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(text = stringResource(R.string.password),
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = password,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    onValueChange = { password = it }
+                    onValueChange = { password = it },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    )
                 )
             }
 
-
             Spacer(modifier = Modifier.height(40.dp))
 
-
             // Basic Info Section (First Name, Last Name, Date of Birth, Gender)
-
 
             Text(
                 text = "Basic Info Section",
@@ -150,47 +165,77 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextField(
-                    label = { Text("First Name") },
+                OutlinedTextField(
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(text = "First Name",
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = firstName,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    onValueChange = { firstName = it }
+                    onValueChange = { firstName = it },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    )
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                TextField(
-                    label = { Text("Last Name") },
+                OutlinedTextField(
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(text = "Last Name",
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = lastName,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    onValueChange = { lastName = it }
+                    onValueChange = { lastName = it },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    )
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 // Date of Birth
                 OutlinedTextField(
                     value = dateOfBirth,
-                    onValueChange = { /* Ignored */ },
-                    label = { Text("Date of Birth") },
+                    label = { Text(text = "Date of Birth",
+                        style = TextStyle(Color(0xFF1B5E20))) },
+                    onValueChange = { dateOfBirth = it },
                     readOnly = true,
-                    trailingIcon = {
-                        Icon(Icons.Default.DateRange, contentDescription = "Select Date",
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    ),
+                    leadingIcon = {
+                        Icon(Icons.Default.DateRange, contentDescription = null,
                             modifier = Modifier.clickable {
                                 showDatePicker(context) { selectedDate ->
                                     dateOfBirth = selectedDate
                                 }
-                            })
+                            }
+                        )
                     }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 // Gender
                 OutlinedTextField(
-                    label = { Text("Gender") },
+                    label = { Text(text = "Gender",
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = gender,
-                    onValueChange = { /* Ignored */ },
-                    readOnly = true,
-                    trailingIcon = {
-                        Icon(Icons.Default.ArrowDropDown, contentDescription = "Expand Gender Menu")
-                    },
-                    modifier = Modifier.clickable {
-                        // Show gender menu
+                    onValueChange = { gender = it },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    leadingIcon = {
+                        Icon(Icons.Default.Face, contentDescription = "Expand Gender Menu")
                     }
                 )
             }
@@ -201,36 +246,47 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
             )
             Spacer(modifier = Modifier.height(30.dp))
 
-
-
-
             // Body Info Section (Height and Weight)
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextField(
-                    label = { Text("Height") },
+                OutlinedTextField(
+                    label = { Text(text = "Height",
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = height.toString(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = { newValue ->
                         height = newValue.toDoubleOrNull() ?: 0.0
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    ),
+                    leadingIcon = {
+                        Icon(Icons.Default.Favorite, contentDescription = "")
                     }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                TextField(
-                    label = { Text("Weight") },
+                OutlinedTextField(
+                    label = { Text(text = "Weight",
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = weight.toString(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = { newValue ->
                         weight = newValue.toDoubleOrNull() ?: 0.0
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    ),
+                    leadingIcon = {
+                        Icon(Icons.Default.FavoriteBorder, contentDescription = "")
                     }
                 )
             }
 
-
             Spacer(modifier = Modifier.height(30.dp))
-
 
             // Check-in Button
             Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
@@ -268,13 +324,12 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                 }
             }
 
-
             Spacer(modifier = Modifier.height(40.dp))
 
-
             // Already have an account? ClickableText
+            Text(text = AnnotatedString(stringResource(R.string.do_you_already_have_account)))
             ClickableText(
-                text = AnnotatedString(stringResource(R.string.do_you_already_have_account)),
+                text = AnnotatedString(stringResource(R.string.login)),
                 onClick = {
                     navigation.popBackStack()
                 },
@@ -288,7 +343,6 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
         }
     }
 }
-
 
 fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
     val calendar = Calendar.getInstance()

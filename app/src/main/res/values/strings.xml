@@ -22,7 +22,7 @@
     <!--Config TEXT for Home  -->
     <string name="welcome">Welcome</string>
     <!--Config TEXT for Login Screen -->
-    <string name="you_do_dnot_dhave_daccount">You do not have an account? Sign up</string>
+    <string name="you_do_dnot_dhave_daccount">You do not have an account?</string>
     <string name="login">Log in</string>
     <string name="forget_pass">Did you forget your password?</string>
     <string name="continue_as_guest">Continue as a guest</string>
@@ -30,7 +30,7 @@
     <string name="password">Password</string>
     <string name="check_in">Check in</string>
     <string name="sign_off">Sign off</string>
-    <string name="do_you_already_have_account">Do you already have an account? Log in</string>
+    <string name="do_you_already_have_account">Do you already have an account?</string>
     <string name="successful_registration">Successful registration</string>
     <!--For use to Crash  -->
     <string name="force_crashlytics">Force Quit Crashlytics</string>
@@ -62,6 +62,6 @@
 
     <string name="delete_record">Delete Record</string>
     <string name="are_you_sure_you_want_to_delete_record">Are you sure you want to delete record?</string>
-    <string name="signup">Sign Up\n</string>
+    <string name="signup">Sign Up</string>
 
 </resources>

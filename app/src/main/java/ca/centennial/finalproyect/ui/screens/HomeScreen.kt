@@ -348,7 +348,6 @@ fun BottomNavGraph(navController: NavHostController, context: Context, authManag
         composable(route = BottomNavScreen.Community.route) {
             CommunityPosts()
         }
-
     }
 }
 

@@ -28,7 +28,7 @@ class ProfileViewModel(): ViewModel() {
                     Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
                 }
 
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
         }
     }
@@ -45,18 +45,25 @@ class ProfileViewModel(): ViewModel() {
 
         try {
             fireStoreRef.get()
-                .addOnSuccessListener {
-                    if (it.exists()) {
-                        val userData = it.toObject<User>()!!
-                        data(userData)
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val userData = document.toObject<User>()
+                        if (userData != null) {
+                            // Fetch BMI-related fields from Firestore
+                            data(userData)
+                        } else {
+                            Toast.makeText(context, "User data is null", Toast.LENGTH_SHORT).show()
+                        }
                     } else {
                         Toast.makeText(context, "No User Data Found", Toast.LENGTH_SHORT).show()
                     }
                 }
-
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
         }
     }
 
+    fun updateUserData(updatedUser: User) {
+
+    }
 }

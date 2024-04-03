@@ -118,8 +118,10 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
                 .align(Alignment.BottomCenter)
         ) {
             Spacer(modifier = Modifier.width(4.dp))
+            Text(text = AnnotatedString(stringResource(R.string.you_do_dnot_dhave_daccount)))
+            Spacer(modifier = Modifier.width(4.dp))
             ClickableText(
-                text = AnnotatedString(stringResource(R.string.you_do_dnot_dhave_daccount)),
+                text = AnnotatedString(stringResource(R.string.signup)),
                 modifier = Modifier.padding(end = 8.dp),
                 onClick = {
                     navigation.navigate(Routes.SignUp.route)
