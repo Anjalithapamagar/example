@@ -5,14 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,46 +18,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import ca.centennial.finalproyect.model.User
-import ca.centennial.finalproyect.ui.navigation.Routes
 import ca.centennial.finalproyect.utils.AuthManager
-import ca.centennial.finalproyect.utils.FirestoreManager
 import ca.centennial.finalproyect.utils.ProfileViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProfileScreen( profileViewModel: ProfileViewModel, authManager: AuthManager) {
-
-    val user = authManager.getCurrentUser()
-
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var datOfBirth by remember { mutableStateOf("") }
-    var gender by remember { mutableStateOf("") }
-    var height by remember { mutableStateOf(0.0) }
-    var weight by remember { mutableStateOf(0.0) }
-    var initialBMI by remember { mutableStateOf(0.0) }
-    var currentBMI by remember { mutableStateOf(0.0) }
-    var bmiCategory by remember { mutableStateOf(0.0) }
+fun ProfileScreen(authManager: AuthManager) {
 
     val context = LocalContext.current
 
     val profileViewModel = remember { ProfileViewModel() }
     var userData by remember { mutableStateOf(User()) }
+    var userAge by remember { mutableStateOf("") }
 
     LaunchedEffect(key1 = true) {
         authManager.getCurrentUser()?.uid?.let { userId ->
             profileViewModel.getUserData(userId, context) { user ->
                 userData = user
+                userAge = calculateAge(user.dateOfBirth)
             }
         }
     }
@@ -75,7 +53,7 @@ fun ProfileScreen( profileViewModel: ProfileViewModel, authManager: AuthManager)
                 .fillMaxSize()
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
             Text(text = "Name: ${userData.firstName} ${userData.lastName}")
 
@@ -91,6 +69,29 @@ fun ProfileScreen( profileViewModel: ProfileViewModel, authManager: AuthManager)
 
             Text(text = "Weight: ${userData.weight.toString()}")
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(text = "Initial BMI: ${userData.initialBMI.toString()}")
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(text = "Current BMI: ${userData.currentBMI.toString()}")
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(text = "BMI Category: ${userData.bmiCategory.toString()}")
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(text = "Date of Birth: ${userData.dateOfBirth.toString()} (${userAge})")
+
         }
     }
+}
+
+fun calculateAge(dateOfBirth: String): String {
+    val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+    val birthDate = dateFormat.parse(dateOfBirth)
+    val cal = Calendar.getInstance()
+    val currentDate = cal.time
+    val diff = currentDate.time - birthDate.time
+    val age = diff / (1000L * 60 * 60 * 24 * 365)
+    return age.toString()
 }

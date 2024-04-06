@@ -63,5 +63,6 @@
     <string name="delete_record">Delete Record</string>
     <string name="are_you_sure_you_want_to_delete_record">Are you sure you want to delete record?</string>
     <string name="signup">Sign Up\n</string>
+    <string name="just_now">Just Now</string>
 
 </resources>

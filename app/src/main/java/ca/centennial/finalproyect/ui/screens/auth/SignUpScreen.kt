@@ -1,11 +1,11 @@
 package ca.centennial.finalproyect.ui.screens.auth
 
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,7 +30,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +42,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -55,21 +53,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ca.centennial.finalproyect.R
 import ca.centennial.finalproyect.ui.navigation.Routes
-import ca.centennial.finalproyect.ui.theme.Purple40
-import ca.centennial.finalproyect.ui.theme.PurpleGrey40
-import ca.centennial.finalproyect.ui.theme.green
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.AuthRes
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 
 @Composable
 fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavController) {
     analytics.logScreenView(screenName = Routes.SignUp.route)
-
 
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
@@ -80,10 +76,6 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
     var gender by remember { mutableStateOf("") }
     var weight by remember { mutableStateOf(0.0) }
     var height by remember { mutableStateOf(0.0) }
-    var initialBMI by remember { mutableStateOf(0.0) }
-    var currentBMI by remember { mutableStateOf(0.0) }
-    var bmiCategory by remember { mutableStateOf("") }
-
 
     val scope = rememberCoroutineScope()
 
@@ -125,7 +117,7 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                     onValueChange = { email = it }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                TextField(
+                OutlinedTextField(
                     label = { Text(text = stringResource(R.string.password)) },
                     value = password,
                     visualTransformation = PasswordVisualTransformation(),
@@ -143,21 +135,21 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
 
             Text(
                 text = "Basic Info Section",
-                style = TextStyle(fontSize = 12.sp, color = PurpleGrey40)
+                style = TextStyle(fontSize = 16.sp, color = Color(0xFF2E7D32))
             )
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextField(
+                OutlinedTextField(
                     label = { Text("First Name") },
                     value = firstName,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     onValueChange = { firstName = it }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                TextField(
+                OutlinedTextField(
                     label = { Text("Last Name") },
                     value = lastName,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -187,30 +179,32 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                     onValueChange = { /* Ignored */ },
                     readOnly = true,
                     trailingIcon = {
-                        Icon(Icons.Default.ArrowDropDown, contentDescription = "Expand Gender Menu")
-                    },
-                    modifier = Modifier.clickable {
-                        // Show gender menu
+                        Icon(
+                            Icons.Default.ArrowDropDown,
+                            contentDescription = "Expand Gender Menu",
+                            modifier = Modifier.clickable {
+                                showGenderSelectionDialog(context) { selectedGender ->
+                                    gender = selectedGender
+                                }
+                            }
+                        )
                     }
                 )
             }
             Spacer(modifier = Modifier.height(40.dp))
             Text(
                 text = "Body Measurements",
-                style = TextStyle(fontSize = 12.sp, color = PurpleGrey40)
+                style = TextStyle(fontSize = 16.sp, color = Color(0xFF2E7D32))
             )
-            Spacer(modifier = Modifier.height(30.dp))
-
-
-
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Body Info Section (Height and Weight)
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextField(
-                    label = { Text("Height") },
+                OutlinedTextField(
+                    label = { Text("Height (Meters)") },
                     value = height.toString(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = { newValue ->
@@ -218,8 +212,8 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                     }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                TextField(
-                    label = { Text("Weight") },
+                OutlinedTextField(
+                    label = { Text("Weight (Kilogram)") },
                     value = weight.toString(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = { newValue ->
@@ -246,9 +240,6 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                                 gender,
                                 height,
                                 weight,
-                                initialBMI,
-                                currentBMI,
-                                bmiCategory,
                                 auth,
                                 analytics,
                                 context,
@@ -264,7 +255,7 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                         Color(0xFF2E7D32)
                     )
                 ) {
-                    Text(text = stringResource(R.string.check_in))
+                    Text(text = stringResource(R.string.signup))
                 }
             }
 
@@ -289,6 +280,18 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
     }
 }
 
+fun showGenderSelectionDialog(context: Context, onGenderSelected: (String) -> Unit) {
+    val genderOptions = listOf("Male", "Female", "Others")
+    val dialog = AlertDialog.Builder(context)
+        .setTitle("Select Gender")
+        .setItems(genderOptions.toTypedArray()) { _, which ->
+            val selectedGender = genderOptions[which]
+            onGenderSelected(selectedGender)
+        }
+        .setCancelable(true)
+        .create()
+    dialog.show()
+}
 
 fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
     val calendar = Calendar.getInstance()
@@ -296,17 +299,21 @@ fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
     val month = calendar.get(Calendar.MONTH)
     val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-
     val datePickerDialog = DatePickerDialog(context,
         { _, selectedYear, selectedMonth, selectedDay ->
-            val selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
+            val selectedDate = formatDateString(selectedYear, selectedMonth, selectedDay)
             onDateSelected(selectedDate)
         }, year, month, day)
-
 
     datePickerDialog.show()
 }
 
+fun formatDateString(year: Int, month: Int, day: Int): String {
+    val calendar = Calendar.getInstance()
+    calendar.set(year, month, day)
+    val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+    return dateFormat.format(calendar.time)
+}
 
 private suspend fun signUp(
     email: String,
@@ -317,18 +324,21 @@ private suspend fun signUp(
     gender: String,
     height: Double,
     weight: Double,
-    initialBMI: Double,
-    currentBMI: Double,
-    bmiCategory: String,
     auth: AuthManager,
     analytics: AnalyticsManager,
     context: Context,
     navigation: NavController
 ) {
+    if (email.isNotEmpty() && password.isNotEmpty() && firstName.isNotEmpty() &&
+        lastName.isNotEmpty() && dateOfBirth.isNotEmpty() && gender.isNotEmpty() &&
+        height > 0 && weight > 0
+    ) {
+        val (calculatedBMI, bmiCategory) = calculateBMI(height, weight)
 
-
-    if (email.isNotEmpty() && password.isNotEmpty() && firstName.isNotEmpty() && lastName.isNotEmpty() && dateOfBirth.isNotEmpty() && gender.isNotEmpty() && height > 0 && weight > 0) {
-        when (val result = auth.createUserWithEmailAndPassword(email, password, firstName, lastName, dateOfBirth, gender, height, weight, initialBMI, currentBMI, bmiCategory)) {
+        when (val result = auth.createUserWithEmailAndPassword(
+            email, password, firstName, lastName, dateOfBirth, gender,
+            height, weight, calculatedBMI, calculatedBMI, bmiCategory
+        )) {
             is AuthRes.Success -> {
                 analytics.logButtonClicked(FirebaseAnalytics.Event.SIGN_UP)
                 Toast.makeText(
@@ -337,12 +347,12 @@ private suspend fun signUp(
                 ).show()
                 navigation.popBackStack()
             }
-
-
             is AuthRes.Error -> {
                 analytics.logButtonClicked("Error SignUp: ${result.errorMessage}")
-                Toast.makeText(context, "Error SignUp: ${result.errorMessage}", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(
+                    context,
+                    "Error SignUp: ${result.errorMessage}", Toast.LENGTH_SHORT
+                ).show()
             }
         }
     } else {
@@ -352,4 +362,23 @@ private suspend fun signUp(
         ).show()
     }
 }
+
+
+private fun calculateBMI(height: Double, weight: Double): Pair<Double, String> {
+    val heightInMeters = height
+    val bmi = weight / (heightInMeters * heightInMeters)
+
+    val roundedBMI = "%.2f".format(bmi).toDouble()
+
+    val category = when {
+        bmi < 18.5 -> "Underweight"
+        bmi in 18.5..24.9 -> "Healthy Weight"
+        bmi in 25.0..29.9 -> "Overweight"
+        else -> "Obesity"
+    }
+
+    return Pair(roundedBMI, category)
+}
+
+
 

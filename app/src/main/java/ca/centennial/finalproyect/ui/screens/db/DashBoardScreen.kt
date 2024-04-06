@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,10 +22,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ca.centennial.finalproyect.utils.AuthManager
-import ca.centennial.finalproyect.utils.RealtimeManager
 
 @Composable
-fun DailyMealPlanScreen(realtime: RealtimeManager, authManager: AuthManager) {
+fun DailyMealPlanScreen(authManager: AuthManager) {
     var showAddContactDialog by remember { mutableStateOf(false) }
 
     //val contacts by realtime.getContactsFlow().collectAsState(emptyList())

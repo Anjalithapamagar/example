@@ -1,137 +1,367 @@
+import android.content.Context
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.Card
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
+import ca.centennial.finalproyect.R
+import ca.centennial.finalproyect.model.Post
+import ca.centennial.finalproyect.utils.AuthManager
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import android.text.format.DateUtils
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material.icons.rounded.ThumbUp
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
+import ca.centennial.finalproyect.model.User
+import ca.centennial.finalproyect.utils.CommunityScreenState
+import ca.centennial.finalproyect.utils.CommunityScreenViewModel
+import ca.centennial.finalproyect.utils.ProfileViewModel
+import java.util.Date
 
-// Data model for posts
-data class Post(val id: Int, val content: String, var likes: Int = 0, var comments: Int = 0)
+@Composable
+fun CommunityScreen(auth: AuthManager, context: Context) {
 
-// Simulated repository for fetching posts
-object FakePostsRepository {
-    fun getPosts(): List<Post> {
-        return listOf(
-            Post(1, "First post"),
-            Post(2, "Second post"),
-            Post(3, "Third post")
+    val communityViewModel = viewModel<CommunityScreenViewModel>()
+    val state by communityViewModel.state.collectAsState()
+    when (state) {
+
+        is CommunityScreenState.Loaded -> {
+            val loaded = state as CommunityScreenState.Loaded
+            CommunityScreenContents(
+                auth,
+                posts = loaded.posts,
+                onTextChange = {
+                    communityViewModel.onTextChanged(it)
+                },
+                onSendClick = {
+                    communityViewModel.onSendClick(context)
+                }
+                )
+        }
+        CommunityScreenState.Loading -> LoadingScreen()
+    }
+}
+
+@Composable
+fun LoadingScreen() {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface),
+        contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun CommunityScreenContents(
+    auth: AuthManager,
+    posts :List<Post>,
+    onTextChange: (String) -> Unit,
+    onSendClick: () -> Unit) {
+    Box(
+        Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .fillMaxSize()
+    ) {
+        LazyColumn {
+            item {
+                PostBar(
+                    auth = auth,
+                    onTextChange = onTextChange,
+                    onSendClick = onSendClick
+                )
+            }
+            items(posts) { post ->
+                Spacer(Modifier.height(8.dp))
+                PostCard(auth, post)
+                Spacer(Modifier.height(8.dp))
+
+            }
+        }
+    }
+}
+
+@Composable
+fun PostCard(auth: AuthManager, post: Post) {
+    val user = auth.getCurrentUser()
+    Surface {
+        Column {
+            Row (
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                if (user?.photoUrl != null) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(user.photoUrl)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "Image",
+                        placeholder = painterResource(id = R.drawable.profileplaceholder),
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(40.dp)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(R.drawable.profileplaceholder),
+                        contentDescription = "Default profile photo",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(40.dp)
+                            .clip(CircleShape)
+                    )
+                }
+
+                Column (
+                    Modifier
+                        .weight(1f)
+                        .padding(horizontal = 8.dp)) {
+                    Text(post.author,
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.Medium
+                        )
+                    )
+                    val today = remember {
+                        Date()
+                    }
+                    Text(dateLabel(timeStamp = post.timeStamp, today = today),
+                        color = MaterialTheme.colorScheme.onSurface.copy(
+                            alpha = 0.66f
+                        )
+                    )
+                }
+                EditDeleteIconButton(
+                    onEditClicked = {
+                        // TODO
+                    },
+                    onDeleteClicked = {
+                        // TODO
+                    }
+                )
+
+            }
+
+            Text(post.content,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp))
+
+            Row(
+                Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically){
+                IconButton(onClick = {
+                    // TODO
+                }) {
+                    Icon(Icons.Outlined.ThumbUp, contentDescription = "like")
+                }
+                Text(text = "Like")
+                Spacer(modifier = Modifier.width(16.dp))
+                IconButton(onClick = {
+                    // TODO
+                }) {
+                    Icon(Icons.Filled.Email, contentDescription = "comment")
+                }
+                Text(text = "Comment")
+            }
+        }
+    }
+}
+@Composable
+fun EditDeleteIconButton(onEditClicked: () -> Unit, onDeleteClicked: () -> Unit) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    IconButton(onClick = { showDialog = true }) {
+        Icon(Icons.Rounded.MoreVert, contentDescription = "menu")
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = {
+                Text(text = "Options")
+            },
+            confirmButton = {
+                Row(
+                    modifier = Modifier.padding(8.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = {
+                        onEditClicked()
+                        showDialog = false
+                    }) {
+                        Text("Edit")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    TextButton(onClick = {
+                        onDeleteClicked()
+                        showDialog = false
+                    }) {
+                        Text("Delete")
+                    }
+                }
+            }
         )
     }
 }
 
-@Composable
-fun CommunityPosts() {
-    val posts by remember { mutableStateOf(FakePostsRepository.getPosts()) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        posts.forEach { post ->
-            PostItem(post = post)
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-        AddPostButton(onAddPost = { content ->
-            val newPost = Post(posts.size + 1, content)
-            posts.toMutableList().apply { add(newPost) }
-        })
+@Composable
+private fun dateLabel(timeStamp: Date, today: Date): String {
+    return if (today.time - timeStamp.time < 2 * DateUtils.MINUTE_IN_MILLIS) {
+        stringResource(R.string.just_now)
+    } else {
+        DateUtils.getRelativeTimeSpanString(timeStamp.time,
+            today.time,
+            0,
+            DateUtils.FORMAT_SHOW_WEEKDAY).toString()
     }
 }
 
 @Composable
-fun PostItem(post: Post) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = post.content,
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { post.likes++ }) {
-                    Icon(Icons.Default.Favorite, contentDescription = "Like")
-                }
-                Text(text = "${post.likes} Likes")
-                Spacer(modifier = Modifier.width(16.dp))
-                IconButton(onClick = { post.comments++ }) {
-                    Icon(Icons.Default.Edit, contentDescription = "Comment")
-                }
-                Text(text = "${post.comments} Comments")
+private fun PostBar(
+    auth: AuthManager,
+    onTextChange: (String) -> Unit,
+    onSendClick: () -> Unit
+) {
+    val context = LocalContext.current
+
+    val user = auth.getCurrentUser()
+
+    val profileViewModel = remember { ProfileViewModel() }
+
+    var userData by remember { mutableStateOf(User()) }
+
+    LaunchedEffect(key1 = true) {
+        auth.getCurrentUser()?.uid?.let { userId ->
+            profileViewModel.getUserData(userId, context) { user ->
+                userData = user
             }
         }
     }
-}
 
-@Composable
-fun AddPostButton(onAddPost: (String) -> Unit) {
-    var newPostText by remember { mutableStateOf("") }
+    Divider(
+        color = Color.Black,
+        thickness = 1.dp,
+        modifier = Modifier.fillMaxWidth()
+    )
+    Surface {
+        Column {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = 8.dp,
+                        vertical = 8.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (user?.photoUrl != null) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(user.photoUrl)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "Image",
+                        placeholder = painterResource(id = R.drawable.profileplaceholder),
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(40.dp)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(R.drawable.profileplaceholder),
+                        contentDescription = "Default profile photo",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(40.dp)
+                            .clip(CircleShape)
+                    )
+                }
 
-    FloatingActionButton(
-        onClick = {
-            if (newPostText.isNotBlank()) {
-                onAddPost(newPostText)
-                newPostText = ""
-            }
-        },
-        modifier = Modifier
-            .padding(16.dp)
-    ) {
-        Icon(Icons.Default.Add, contentDescription = "Add")
-    }
+                Spacer(Modifier.width(8.dp))
 
-    Dialog(onDismissRequest = { /* Dismiss the dialog */ }) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            TextField(
-                value = newPostText,
-                onValueChange = { newPostText = it },
-                label = { Text("Enter your new post") },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = {
-                    if (newPostText.isNotBlank()) {
-                        onAddPost(newPostText)
-                        newPostText = ""
+                var text by remember {
+                    mutableStateOf("")
+                }
+                TextField(
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp),
+                    value = text, onValueChange = {
+                        text = it
+                        onTextChange(it)
+                    },
+                    placeholder = {
+                        if (user != null) {
+                            Text(text = "What's on your mind, ${userData.firstName}?")
+                        }
                     }
-                })
+                )
+                IconButton(
+                    onClick = {
+                        onSendClick()
+                        text = ""
+                    },
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Send,
+                        contentDescription = "Send",
+                        tint = Color.Black
+                    )
+                }
+            }
+            Divider(
+                color = Color.LightGray,
+                thickness = 1.dp,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewCommunityPosts() {
-    CommunityPosts()
-}
-
-@Preview
-@Composable
-fun PreviewPostItem() {
-    PostItem(Post(1, "Sample Post"))
-}
-
-@Preview
-@Composable
-fun PreviewAddPostButton() {
-    AddPostButton(onAddPost = { })
 }
