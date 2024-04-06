@@ -1,6 +1,7 @@
 package ca.centennial.finalproyect.ui.screens
 
 import CommunityScreen
+import android.Manifest
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -65,6 +66,8 @@ import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.ProfileViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
@@ -81,6 +84,7 @@ private var isButtonVisible by mutableStateOf(true)
 val WELCOME_MESSAGE_KEY = "welcome_message"
 val IS_BUTTON_VISIBLE_KEY = "is_button_visible"
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavController, posts: List<Post>) {
     analytics.logScreenView(screenName = Routes.Home.route)
@@ -97,6 +101,8 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
     val profileViewModel = remember { ProfileViewModel() }
 
     var userData by remember { mutableStateOf(User()) }
+    val postNotificationPermission=
+        rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
 
     LaunchedEffect(key1 = true) {
         auth.getCurrentUser()?.uid?.let { userId ->
@@ -310,7 +316,7 @@ fun BottomNavGraph(navController: NavHostController, context: Context, authManag
             DailyMealPlanScreen(authManager = authManager)
         }
         composable(route = BottomNavScreen.Profile.route) {
-            ProfileScreen(authManager = authManager)
+            ProfileScreen(authManager = authManager, navigation = navController)
         }
         composable(route = BottomNavScreen.Community.route) {
             CommunityScreen(auth = authManager, context = context)

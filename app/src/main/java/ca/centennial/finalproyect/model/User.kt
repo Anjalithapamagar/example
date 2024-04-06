@@ -11,5 +11,6 @@ data class User(
     val weight: Double = 0.0,
     val initialBMI: Double = 0.0,
     val currentBMI: Double = 0.0,
+    val bmiResult: Double = 0.0,
     val bmiCategory: String = ""
 )

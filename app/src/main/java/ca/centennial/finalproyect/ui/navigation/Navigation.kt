@@ -17,10 +17,12 @@ import ca.centennial.finalproyect.ui.screens.Screen
 import ca.centennial.finalproyect.ui.screens.auth.ForgotPasswordScreen
 import ca.centennial.finalproyect.ui.screens.auth.LoginScreen
 import ca.centennial.finalproyect.ui.screens.auth.SignUpScreen
+import ca.centennial.finalproyect.ui.screens.db.ProfileScreen
 //import ca.centennial.finalproyect.ui.screens.auth.SignUpScreen
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.FirestoreManager
+import ca.centennial.finalproyect.utils.ProfileViewModel
 
 @Composable
 fun Navigation(context: Context, navController: NavHostController = rememberNavController()) {
@@ -70,6 +72,12 @@ fun Navigation(context: Context, navController: NavHostController = rememberNavC
                 ForgotPasswordScreen(
                     analytics = analytics,
                     auth = authManager,
+                    navigation = navController
+                )
+            }
+            composable(Routes.ProfileScreen.route) {
+                ProfileScreen(
+                    authManager = authManager,
                     navigation = navController
                 )
             }
