@@ -122,7 +122,6 @@ fun LoginScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavC
             Spacer(modifier = Modifier.width(4.dp))
             ClickableText(
                 text = AnnotatedString(stringResource(R.string.signup)),
-                modifier = Modifier.padding(end = 8.dp),
                 onClick = {
                     navigation.navigate(Routes.SignUp.route)
                     analytics.logButtonClicked("Click: Sign Up")
@@ -307,7 +306,7 @@ private suspend fun emailPassSignIn(email: String, password: String, auth: AuthM
 }
 
 @Composable
-fun SocialMediaButton(onClick: () -> Unit, text: String, icon: Int, color: Color, ) {
+fun SocialMediaButton(onClick: () -> Unit, text: String, icon: Int, color: Color ) {
     var click by remember { mutableStateOf(false) }
     Surface(
         onClick = onClick,

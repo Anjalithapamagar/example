@@ -6,8 +6,6 @@ import ca.centennial.finalproyect.model.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import android.content.Context
-import android.provider.ContactsContract
-import ca.centennial.finalproyect.model.Record
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.CoroutineScope
@@ -48,42 +46,21 @@ class ProfileViewModel(): ViewModel() {
 
         try {
             fireStoreRef.get()
-                .addOnSuccessListener {
-                    if (it.exists()) {
-                        val userData = it.toObject<User>()!!
-                        data(userData)
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val userData = document.toObject<User>()
+                        if (userData != null) {
+                            // Fetch BMI-related fields from Firestore
+                            data(userData)
+                        } else {
+                            Toast.makeText(context, "User data is null", Toast.LENGTH_SHORT).show()
+                        }
                     } else {
                         Toast.makeText(context, "No User Data Found", Toast.LENGTH_SHORT).show()
                     }
                 }
-
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    fun getLatestNoteData(userId: String, onDataLoaded: (Record) -> Unit) {
-        val firestore = Firebase.firestore
-        val notesRef = firestore.collection("notes")
-            .whereEqualTo("userId", userId)
-            .orderBy("timestamp", Query.Direction.DESCENDING)
-            .limit(1)
-
-        notesRef.get()
-            .addOnSuccessListener { documents ->
-                if (!documents.isEmpty) {
-                    val latestRecord = documents.documents[0].toObject<Record>()
-                    if (latestRecord != null) {
-                        onDataLoaded(latestRecord)
-                    } else {
-                        // Handle the case where the latest note is null
-                    }
-                } else {
-                    // Handle the case where there are no notes for the user
-                }
-            }
-            .addOnFailureListener { e ->
-                // Handle any errors
-            }
     }
 }

@@ -5,6 +5,7 @@ import android.Manifest
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,9 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.icons.outlined.ExitToApp
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -39,11 +38,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -63,10 +62,12 @@ import ca.centennial.finalproyect.ui.screens.db.DailyMealPlanScreen
 import ca.centennial.finalproyect.ui.screens.db.ProfileScreen
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
+import ca.centennial.finalproyect.utils.FoodNotificationService
 import ca.centennial.finalproyect.utils.ProfileViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ConfigUpdate
@@ -94,15 +95,22 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
 
     val user = auth.getCurrentUser()
 
-    var showDialog by remember { mutableStateOf(false) }
-
     val context = LocalContext.current
 
     val profileViewModel = remember { ProfileViewModel() }
+//    var showDialog by remember { mutableStateOf(false) }
 
     var userData by remember { mutableStateOf(User()) }
     val postNotificationPermission=
         rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+
+    val foodNotificationService= FoodNotificationService(context)
+
+    LaunchedEffect(key1 = true ){
+        if(!postNotificationPermission.status.isGranted){
+            postNotificationPermission.launchPermissionRequest()
+        }
+    }
 
     LaunchedEffect(key1 = true) {
         auth.getCurrentUser()?.uid?.let { userId ->
@@ -112,14 +120,14 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
         }
     }
 
-    val onLogoutConfirmed: () -> Unit = {
-        auth.signOut()
-        navigation.navigate(Routes.Login.route) {
-            popUpTo(Routes.Home.route) {
-                inclusive = true
-            }
-        }
-    }
+//    val onLogoutConfirmed: () -> Unit = {
+//        auth.signOut()
+//        navigation.navigate(Routes.Login.route) {
+//            popUpTo(Routes.Home.route) {
+//                inclusive = true
+//            }
+//        }
+//    }
 
     Scaffold (
         topBar = {
@@ -138,7 +146,7 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                                         .crossfade(true)
                                         .build(),
                                     contentDescription = "Image",
-                                    placeholder = painterResource(id = R.drawable.profileplaceholder),
+                                    placeholder = painterResource(id = R.drawable.user_profile),
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
                                         .clip(CircleShape)
@@ -146,7 +154,7 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                                 )
                             } else {
                                 Image(
-                                    painter = painterResource(R.drawable.profileplaceholder),
+                                    painter = painterResource(R.drawable.user_profile),
                                     contentDescription = "Default profile photo",
                                     modifier = Modifier
                                         .padding(end = 8.dp)
@@ -157,6 +165,7 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                             Spacer(modifier = Modifier.width(10.dp))
                             Column {
                                 Text(
+                                    color = Color(0xFF2E7D32),
                                     text = if (userData.firstName.isNotEmpty() && userData.lastName.isNotEmpty()) {
                                         "${userData.firstName} ${userData.lastName}"
                                     } else {
@@ -170,6 +179,7 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                                     text = if (!user?.email.isNullOrEmpty()) "${user?.email}" else "Anonymous",
                                     fontSize = 12.sp,
                                     maxLines = 1,
+                                    color = Color(0xFF1B5E20),
                                     overflow = TextOverflow.Ellipsis
                                 )
                             }
@@ -177,15 +187,22 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                     },
                     colors = TopAppBarDefaults.smallTopAppBarColors(),
                     actions = {
+//                        IconButton(
+//                            onClick = {
+//                                showDialog = true
+//                            }
+//                        ) {
+//                            Icon(
+//                                Icons.Outlined.ExitToApp,
+//                                contentDescription = stringResource(R.string.sign_off), tint = Color(0xFF2E7D32)
+//                            )
+//                        }
                         IconButton(
                             onClick = {
-                                showDialog = true
+                                foodNotificationService.showExpandableNotification()
                             }
                         ) {
-                            Icon(
-                                Icons.Outlined.ExitToApp,
-                                contentDescription = stringResource(R.string.sign_off)
-                            )
+                            Icon(Icons.Outlined.Notifications, contentDescription = "Expandable Notifications", tint = Color(0xFF2E7D32))
                         }
                     }
                 )
@@ -196,12 +213,12 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
         }
     ){ contentPadding ->
         Box(modifier = Modifier.padding(contentPadding)) {
-            if (showDialog) {
-                LogoutDialog(onConfirmLogout = {
-                    onLogoutConfirmed()
-                    showDialog = false
-                }, onDismiss = { showDialog = false })
-            }
+//            if (showDialog) {
+//                LogoutDialog(onConfirmLogout = {
+//                    onLogoutConfirmed()
+//                    showDialog = false
+//                }, onDismiss = { showDialog = false })
+//            }
             BottomNavGraph(navController = navController, context = context, authManager = auth, posts = posts)
         }
     }
@@ -247,28 +264,28 @@ fun displayWelcomeMessage() {
     isButtonVisible = mFirebaseRemoteConfig[IS_BUTTON_VISIBLE_KEY].asBoolean()
 }
 
-@Composable
-fun LogoutDialog(onConfirmLogout: () -> Unit, onDismiss: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Sign out") },
-        text = { Text("Are you sure you want to log out?") },
-        confirmButton = {
-            Button(
-                onClick = onConfirmLogout
-            ) {
-                Text("Yes")
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = onDismiss
-            ) {
-                Text("Cancel")
-            }
-        }
-    )
-}
+//@Composable
+//fun LogoutDialog(onConfirmLogout: () -> Unit, onDismiss: () -> Unit) {
+//    AlertDialog(
+//        onDismissRequest = onDismiss,
+//        title = { Text("Sign out") },
+//        text = { Text("Are you sure you want to log out?") },
+//        confirmButton = {
+//            Button(
+//                onClick = onConfirmLogout
+//            ) {
+//                Text("Yes")
+//            }
+//        },
+//        dismissButton = {
+//            Button(
+//                onClick = onDismiss
+//            ) {
+//                Text("Cancel")
+//            }
+//        }
+//    )
+//}
 
 @Composable
 fun BottomBar(navController: NavHostController) {
@@ -279,7 +296,7 @@ fun BottomBar(navController: NavHostController) {
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    NavigationBar {
+    NavigationBar(Modifier.background(color =  Color(0xFF2E7D32))) {
         screens.forEach { screens ->
             if (currentDestination != null) {
                 AddItem(
@@ -295,8 +312,8 @@ fun BottomBar(navController: NavHostController) {
 @Composable
 fun RowScope.AddItem(screens: BottomNavScreen, currentDestination: NavDestination, navController: NavHostController) {
     NavigationBarItem(
-        label = { Text(text = screens.title) },
-        icon = { Icon(imageVector = screens.icon, contentDescription = "Icons") },
+        label = { Text(text = screens.title, color = Color(0xFF1B5E20)) },
+        icon = { Icon(imageVector = screens.icon, contentDescription = "Icons", tint = Color(0xFF2E7D32)) },
         selected = currentDestination.hierarchy?.any {
             it.route == screens.route
         } == true,

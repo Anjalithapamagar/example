@@ -9,10 +9,12 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d1a049fe-b26c-4d30-883d-e72031ce4117" name="Changes" comment="Added Community Screen with partial functionality">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/model/Comment.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/model/Post.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/CommunityScreenViewModel.kt" afterDir="false" />
+    <list default="true" id="d1a049fe-b26c-4d30-883d-e72031ce4117" name="Changes" comment="UI Designs and Profile Screen Changes">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/storage/FoodNotification.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/FoodNotification.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/FoodNotificationService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/food_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/food_remainder.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.2/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.2/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.2/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.2/executionHistory/executionHistory.lock" afterDir="false" />
@@ -23,18 +25,12 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/model/Contact.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/model/Note.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/navigation/Navigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/navigation/Navigation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/model/Record.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/HomeScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/auth/LoginScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/auth/LoginScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/auth/SignUpScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/auth/SignUpScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/db/CommunityScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/db/CommunityScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/db/ContactsScreen.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/db/DashBoardScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/db/DashBoardScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/db/ProfileScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/db/ProfileScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/db/TrackerScreen.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/FirestoreManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/FirestoreManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/RealtimeManager.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/ProfileViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/ProfileViewModel.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,7 +41,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/ritzghever/.android/avd/Pixel_7_Pro_API_34.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/lambey/.android/avd/Pixel_2_XL_API_34.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -86,7 +82,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -107,11 +103,12 @@
     "com.google.services.firebase.aqiPopupShown": "true",
     "git-widget-placeholder": "main",
     "last_directory_selection": "/Users/ritzghever/AndroidStudioProjects/nutri-mate/app/src/main/res/drawable",
-    "last_opened_file_path": "/Users/ritzghever/AndroidStudioProjects/nutri-mate/app/src/main/res/drawable"
+    "last_opened_file_path": "/Users/lambey/Desktop/example/app/src/main/java/ca/centennial/finalproyect/ui/screens/db"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/db" />
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -120,6 +117,13 @@
     <key name="CreateKotlinClassDialog.RecentsKey">
       <recent name="ca.centennial.finalproyect.utils" />
       <recent name="" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="ca.centennial.finalproyect.model" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="ca.centennial.finalproyect.utils" />
+      <recent name="ca.centennial.finalproyect.ui.screens.storage" />
     </key>
   </component>
   <component name="RunManager" selected="Android App.app">
@@ -331,7 +335,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711499797683</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="UI Designs and Profile Screen Changes">
+      <option name="closed" value="true" />
+      <created>1712441585698</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1712441585698</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -354,6 +366,7 @@
     <MESSAGE value="add User data, profile screen, fixed some issues" />
     <MESSAGE value="Added Login, SignUp, ForgotPassword Screen UI. and initialize API" />
     <MESSAGE value="Added Community Screen with partial functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Community Screen with partial functionality" />
+    <MESSAGE value="UI Designs and Profile Screen Changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="UI Designs and Profile Screen Changes" />
   </component>
 </project>

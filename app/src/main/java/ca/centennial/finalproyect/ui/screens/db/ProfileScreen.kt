@@ -1,8 +1,6 @@
 package ca.centennial.finalproyect.ui.screens.db
 
 import android.annotation.SuppressLint
-import android.provider.ContactsContract
-import android.provider.ContactsContract.CommonDataKinds.Note
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,13 +21,13 @@ import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,7 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ca.centennial.finalproyect.R
-import ca.centennial.finalproyect.model.Record
 import ca.centennial.finalproyect.model.User
 import ca.centennial.finalproyect.ui.navigation.Routes
 import ca.centennial.finalproyect.ui.theme.PurpleGrey40
@@ -71,17 +68,12 @@ fun ProfileScreen(authManager: AuthManager, navigation: NavController) {
     var showDialog by remember { mutableStateOf(false) }
     var userData by remember { mutableStateOf(User()) }
     var userAge by remember { mutableStateOf("") }
-    var noteData by remember { mutableStateOf(Record()) }
 
     LaunchedEffect(key1 = true) {
         authManager.getCurrentUser()?.uid?.let { userId ->
             profileViewModel.getUserData(userId, context) { user ->
                 userData = user
                 userAge = calculateAge(user.dateOfBirth)
-            }
-
-            profileViewModel.getLatestNoteData(userId) { record ->
-                noteData = record
             }
         }
     }
@@ -226,7 +218,7 @@ fun ProfileScreen(authManager: AuthManager, navigation: NavController) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "BMI: ${noteData.bmiResult}",
+                    text = "Initial BMI: ${userData.initialBMI}",
                     color = Color(0xFF1B5E20),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
@@ -238,14 +230,33 @@ fun ProfileScreen(authManager: AuthManager, navigation: NavController) {
                 modifier = Modifier.padding(bottom = 16.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Star,
+                    imageVector = Icons.Default.ThumbUp,
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
                     tint = Color(0xFF1B5E20)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "BMI Category: ${noteData.bmiCategory}",
+                    text = "Current BMI: ${userData.currentBMI}",
+                    color = Color(0xFF1B5E20),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.List,
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = Color(0xFF1B5E20)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "BMI Category: ${userData.bmiCategory}",
                     color = Color(0xFF1B5E20),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold

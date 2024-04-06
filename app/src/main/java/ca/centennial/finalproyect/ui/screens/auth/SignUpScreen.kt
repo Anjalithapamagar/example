@@ -25,11 +25,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +59,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ca.centennial.finalproyect.R
 import ca.centennial.finalproyect.ui.navigation.Routes
+import ca.centennial.finalproyect.ui.theme.PurpleGrey40
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.AuthRes
@@ -98,12 +105,8 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                     .size(200.dp)
                     .padding(bottom = 20.dp)
             )
-            Text(
-                text = "Create an Account",
-                style = TextStyle(fontSize = 20.sp, color = Color(0xFF2E7D32))
-            )
-            Spacer(modifier = Modifier.height(20.dp))
 
+            Spacer(modifier = Modifier.height(10.dp))
 
             // Abc Section (Email and Password)
             Column(
@@ -111,64 +114,111 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedTextField(
-                    label = { Text(text = stringResource(R.string.email)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Email,
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(text = stringResource(R.string.email),
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = email,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    onValueChange = { email = it }
+                    onValueChange = { email = it },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20),
+                        unfocusedBorderColor = Color(0xFF388E3C)
+                    )
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 OutlinedTextField(
-                    label = { Text(text = stringResource(R.string.password)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(text = stringResource(R.string.password),
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = password,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    onValueChange = { password = it }
+                    onValueChange = { password = it },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20),
+                        unfocusedBorderColor = Color(0xFF388E3C)
+                    )
                 )
             }
 
-
             Spacer(modifier = Modifier.height(40.dp))
-
 
             // Basic Info Section (First Name, Last Name, Date of Birth, Gender)
 
-
             Text(
                 text = "Basic Info Section",
-                style = TextStyle(fontSize = 16.sp, color = Color(0xFF2E7D32))
+                style = TextStyle(fontSize = 12.sp, color = PurpleGrey40)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedTextField(
-                    label = { Text("First Name") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(text = "First Name",
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = firstName,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    onValueChange = { firstName = it }
+                    onValueChange = { firstName = it },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    )
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 OutlinedTextField(
-                    label = { Text("Last Name") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(text = "Last Name",
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = lastName,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    onValueChange = { lastName = it }
+                    onValueChange = { lastName = it },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    )
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 // Date of Birth
                 OutlinedTextField(
                     value = dateOfBirth,
+                    label = { Text(text = "Date of Birth",
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     onValueChange = { /* Ignored */ },
-                    label = { Text("Date of Birth") },
                     readOnly = true,
-                    trailingIcon = {
-                        Icon(Icons.Default.DateRange, contentDescription = "Select Date",
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20),
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    ),
+                    leadingIcon = {
+                        Icon(Icons.Default.DateRange, contentDescription = null,
                             modifier = Modifier.clickable {
                                 showDatePicker(context) { selectedDate ->
                                     dateOfBirth = selectedDate
                                 }
-                            })
+                            }
+                        )
                     }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
@@ -178,7 +228,11 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                     value = gender,
                     onValueChange = { /* Ignored */ },
                     readOnly = true,
-                    trailingIcon = {
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    ),
+                    leadingIcon = {
                         Icon(
                             Icons.Default.ArrowDropDown,
                             contentDescription = "Expand Gender Menu",
@@ -194,9 +248,9 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
             Spacer(modifier = Modifier.height(40.dp))
             Text(
                 text = "Body Measurements",
-                style = TextStyle(fontSize = 16.sp, color = Color(0xFF2E7D32))
+                style = TextStyle(fontSize = 12.sp, color = PurpleGrey40)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             // Body Info Section (Height and Weight)
             Column(
@@ -204,24 +258,39 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedTextField(
-                    label = { Text("Height (Meters)") },
+                    label = { Text("Height (Meters)",
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = height.toString(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = { newValue ->
                         height = newValue.toDoubleOrNull() ?: 0.0
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    ),
+                    leadingIcon = {
+                        Icon(Icons.Default.Favorite, contentDescription = "")
                     }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 OutlinedTextField(
-                    label = { Text("Weight (Kilogram)") },
+                    label = { Text("Weight (Kilogram)",
+                        style = TextStyle(Color(0xFF1B5E20))) },
                     value = weight.toString(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = { newValue ->
                         weight = newValue.toDoubleOrNull() ?: 0.0
+                    },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF1B5E20), // Set the outline color when focused
+                        unfocusedBorderColor = Color(0xFF388E3C) // Set the outline color when not focused
+                    ),
+                    leadingIcon = {
+                        Icon(Icons.Default.FavoriteBorder, contentDescription = "")
                     }
                 )
             }
-
 
             Spacer(modifier = Modifier.height(30.dp))
 
@@ -259,13 +328,14 @@ fun SignUpScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: Nav
                 }
             }
 
-
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
 
             // Already have an account? ClickableText
+            Text(text = AnnotatedString(stringResource(R.string.do_you_already_have_account)))
+            Spacer(modifier = Modifier.width(4.dp))
             ClickableText(
-                text = AnnotatedString(stringResource(R.string.do_you_already_have_account)),
+                text = AnnotatedString(stringResource(R.string.login)),
                 onClick = {
                     navigation.popBackStack()
                 },

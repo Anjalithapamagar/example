@@ -18,11 +18,9 @@ import ca.centennial.finalproyect.ui.screens.auth.ForgotPasswordScreen
 import ca.centennial.finalproyect.ui.screens.auth.LoginScreen
 import ca.centennial.finalproyect.ui.screens.auth.SignUpScreen
 import ca.centennial.finalproyect.ui.screens.db.ProfileScreen
-//import ca.centennial.finalproyect.ui.screens.auth.SignUpScreen
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.FirestoreManager
-import ca.centennial.finalproyect.utils.ProfileViewModel
 
 @Composable
 fun Navigation(context: Context, navController: NavHostController = rememberNavController()) {
