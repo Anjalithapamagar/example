@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.TextButton
@@ -62,8 +63,14 @@ fun CommunityScreen(auth: AuthManager, context: Context) {
                 },
                 onSendClick = {
                     communityViewModel.onSendClick(context)
+                },
+                onDeleteClicked = { post ->
+                    communityViewModel.deletePostIfAuthorMatches(context, post)
+                },
+                onLikeClicked = { post ->
+                    communityViewModel.incrementLikes(post)
                 }
-                )
+            )
         }
         CommunityScreenState.Loading -> LoadingScreen()
     }
@@ -85,7 +92,9 @@ private fun CommunityScreenContents(
     auth: AuthManager,
     posts :List<Post>,
     onTextChange: (String) -> Unit,
-    onSendClick: () -> Unit) {
+    onSendClick: () -> Unit,
+    onDeleteClicked: (Post) -> Unit,
+    onLikeClicked: (Post) -> Unit) {
     Box(
         Modifier
             .background(MaterialTheme.colorScheme.background)
@@ -101,7 +110,7 @@ private fun CommunityScreenContents(
             }
             items(posts) { post ->
                 Spacer(Modifier.height(8.dp))
-                PostCard(auth, post)
+                PostCard(auth, post,onDeleteClicked, onLikeClicked)
                 Spacer(Modifier.height(8.dp))
 
             }
@@ -110,8 +119,23 @@ private fun CommunityScreenContents(
 }
 
 @Composable
-fun PostCard(auth: AuthManager, post: Post) {
+fun PostCard(auth: AuthManager, post: Post, onDeleteClicked: (Post) -> Unit, onLikeClicked: (Post) -> Unit) {
     val user = auth.getCurrentUser()
+
+//    val context = LocalContext.current
+//
+//    val communityViewModel = remember { CommunityScreenViewModel() }
+//
+//    var postData by remember { mutableStateOf(User()) }
+//
+//    LaunchedEffect(key1 = true) {
+//        auth.getCurrentUser()?.`uid?.let { post ->
+//            communityViewModel.getPostData(userId, context) { user ->
+//                userData = user
+//            }
+//        }
+//    }
+
     Surface {
         Column {
             Row (
@@ -126,7 +150,7 @@ fun PostCard(auth: AuthManager, post: Post) {
                             .crossfade(true)
                             .build(),
                         contentDescription = "Image",
-                        placeholder = painterResource(id = R.drawable.profileplaceholder),
+                        placeholder = painterResource(id = R.drawable.user_profile),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .clip(CircleShape)
@@ -134,7 +158,7 @@ fun PostCard(auth: AuthManager, post: Post) {
                     )
                 } else {
                     Image(
-                        painter = painterResource(R.drawable.profileplaceholder),
+                        painter = painterResource(R.drawable.user_profile),
                         contentDescription = "Default profile photo",
                         modifier = Modifier
                             .padding(8.dp)
@@ -165,9 +189,8 @@ fun PostCard(auth: AuthManager, post: Post) {
                     onEditClicked = {
                         // TODO
                     },
-                    onDeleteClicked = {
-                        // TODO
-                    }
+                    onDeleteClicked = { onDeleteClicked(post) },
+                    post = post
                 )
 
             }
@@ -185,11 +208,11 @@ fun PostCard(auth: AuthManager, post: Post) {
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically){
                 IconButton(onClick = {
-                    // TODO
+                    onLikeClicked(post)
                 }) {
                     Icon(Icons.Outlined.ThumbUp, contentDescription = "like")
                 }
-                Text(text = "Like")
+                Text(text = "Likes")
                 Spacer(modifier = Modifier.width(16.dp))
                 IconButton(onClick = {
                     // TODO
@@ -202,7 +225,7 @@ fun PostCard(auth: AuthManager, post: Post) {
     }
 }
 @Composable
-fun EditDeleteIconButton(onEditClicked: () -> Unit, onDeleteClicked: () -> Unit) {
+fun EditDeleteIconButton(onEditClicked: () -> Unit, onDeleteClicked: () -> Unit, post: Post) {
     var showDialog by remember { mutableStateOf(false) }
 
     IconButton(onClick = { showDialog = true }) {
@@ -220,14 +243,14 @@ fun EditDeleteIconButton(onEditClicked: () -> Unit, onDeleteClicked: () -> Unit)
                     modifier = Modifier.padding(8.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    TextButton(onClick = {
+                    Button(onClick = {
                         onEditClicked()
                         showDialog = false
                     }) {
                         Text("Edit")
                     }
                     Spacer(modifier = Modifier.width(8.dp))
-                    TextButton(onClick = {
+                    Button(onClick = {
                         onDeleteClicked()
                         showDialog = false
                     }) {
@@ -297,7 +320,7 @@ private fun PostBar(
                             .crossfade(true)
                             .build(),
                         contentDescription = "Image",
-                        placeholder = painterResource(id = R.drawable.profileplaceholder),
+                        placeholder = painterResource(id = R.drawable.user_profile),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .clip(CircleShape)
@@ -305,7 +328,7 @@ private fun PostBar(
                     )
                 } else {
                     Image(
-                        painter = painterResource(R.drawable.profileplaceholder),
+                        painter = painterResource(R.drawable.user_profile),
                         contentDescription = "Default profile photo",
                         modifier = Modifier
                             .padding(8.dp)

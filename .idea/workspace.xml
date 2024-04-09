@@ -10,22 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d1a049fe-b26c-4d30-883d-e72031ce4117" name="Changes" comment="Test">
-      <change beforePath="$PROJECT_DIR$/.gradle/8.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/AndroidFirebaseApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/AndroidFirebaseApp.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/HomeScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/age/AgeScreen.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/gender/GenderSelectionScreen.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/gender/GenderSelectionViewModel.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/height/HeightScreen.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/height/HeightViewModel.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/weight/WeightScreen.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/weight/WeightViewModel.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/storage/OnboardingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/storage/OnboardingScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/db/CommunityScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/db/CommunityScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/CommunityScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/CommunityScreenViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/FoodNotification.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/FoodNotificationService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/FoodNotificationService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/Routes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/Routes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +23,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/lambey/.android/avd/Pixel_2_XL_API_34.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/ritzghever/.android/avd/Pixel_7_Pro_API_34.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />

@@ -1,5 +1,6 @@
 package ca.centennial.finalproyect.utils
 
+import android.app.AlertDialog
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -121,4 +122,71 @@ class CommunityScreenViewModel : ViewModel() {
             }
         }
     }
+
+    fun incrementLikes(post: Post) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val postRef = Firebase.firestore.collection("posts").document(post.author)
+            Firebase.firestore.runTransaction { transaction ->
+                val snapshot = transaction.get(postRef)
+                val currentLikes = snapshot.getLong("likes") ?: 0
+                transaction.update(postRef, "likes", currentLikes + 1)
+            }.addOnSuccessListener {
+                // Likes incremented successfully
+            }.addOnFailureListener { exception ->
+                // Handle failure
+            }
+        }
+    }
+
+
+    fun deletePostIfAuthorMatches(context: Context, post: Post) {
+        val currentUser = Firebase.auth.currentUser
+        val profileViewModel = ProfileViewModel()
+
+        if (currentUser != null) {
+
+            profileViewModel.getUserData(currentUser.uid, context) { user ->
+
+                val authorFullName = "${user.firstName} ${user.lastName}"
+
+                if (post.author == authorFullName) {
+                    val alertDialogBuilder = AlertDialog.Builder(context)
+                    alertDialogBuilder.apply {
+                        setTitle("Confirm Deletion")
+                        setMessage("Are you sure you want to delete this post?")
+                        setPositiveButton("Yes") { _, _ ->
+                            Firebase.firestore.collection("posts")
+                                .whereEqualTo("author", authorFullName)
+                                .whereEqualTo("content", post.content)
+                                .get()
+                                .addOnSuccessListener { documents ->
+                                    for (document in documents) {
+                                        document.reference.delete()
+                                    }
+                                }
+                                .addOnFailureListener { exception ->
+                                    // Handle errors
+                                }
+                        }
+                        setNegativeButton("No") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        show()
+                    }
+                } else {
+                    val alertDialogBuilder = AlertDialog.Builder(context)
+                    alertDialogBuilder.apply {
+                        setTitle("Error")
+                        setMessage("You are not authorized to delete this post.")
+                        setPositiveButton("OK") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        show()
+                    }
+                }
+            }
+        }
+    }
+
+
 }
