@@ -12,11 +12,11 @@ class FoodNotificationService(
     private val context: Context
 ) {
     private val notificationManager=context.getSystemService(NotificationManager::class.java)
-    fun showBasicNotification(){
+    fun showBasicNotification(authorName: String, postContent: String) {
         val notification= NotificationCompat.Builder(context,"food_notification")
-            .setContentTitle("Food Remainder")
-            .setContentText("Time to have a balanced diet food!")
-            .setSmallIcon(R.drawable.food_icon)
+            .setContentTitle(authorName)
+            .setContentText(postContent)
+            .setSmallIcon(R.drawable.user_profile)
             .setPriority(NotificationManager.IMPORTANCE_HIGH)
             .setAutoCancel(true)
             .build()

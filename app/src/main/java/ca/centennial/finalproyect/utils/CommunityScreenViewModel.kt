@@ -30,7 +30,7 @@ sealed class CommunityScreenState {
 
 class CommunityScreenViewModel : ViewModel() {
 
-   private val mutableState = MutableStateFlow<CommunityScreenState>(
+    private val mutableState = MutableStateFlow<CommunityScreenState>(
         CommunityScreenState.Loading
     )
 
@@ -112,7 +112,9 @@ class CommunityScreenViewModel : ViewModel() {
                             "content" to postText,
                             "date_posted" to Date()
                         )
-                    )
+                    ).addOnSuccessListener { documentReference ->
+                        FoodNotificationService(context).showBasicNotification(authorName, postText)
+                    }
                 }
             } else {
                 "Tried to post without a signed in user"

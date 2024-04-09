@@ -27,11 +27,8 @@ import androidx.navigation.navArgument
 import ca.centennial.finalproyect.data.local.DefaultSharedPreferences
 import ca.centennial.finalproyect.ui.screens.HomeScreen
 import ca.centennial.finalproyect.ui.screens.home_screen.HomeScreen_2
-import ca.centennial.finalproyect.ui.screens.onboarding.gender.GenderSelectionScreen
 import ca.centennial.finalproyect.ui.screens.onboarding.goal.GoalScreen
-import ca.centennial.finalproyect.ui.screens.onboarding.height.HeightScreen
 import ca.centennial.finalproyect.ui.screens.onboarding.nutrient_goal.NutrientGoalScreen
-import ca.centennial.finalproyect.ui.screens.onboarding.weight.WeightScreen
 import ca.centennial.finalproyect.ui.screens.search.SearchScreen
 
 
@@ -100,21 +97,6 @@ fun OnboardingNavigation(context: Context, navController: NavHostController, sha
         composable(Routes.ROUTE_WELCOME) {
             // Asumiendo que WelcomeScreen no necesita navegar automáticamente
             WelcomeScreen(
-                navClickCallback = { navController.navigate(Routes.ROUTE_GENDER) }
-            )
-        }
-        composable(Routes.ROUTE_GENDER) {
-            GenderSelectionScreen(
-                navClickCallback = { navController.navigate(Routes.ROUTE_WEIGHT) }
-            )
-        }
-        composable(Routes.ROUTE_WEIGHT) {
-            WeightScreen(
-                navClickCallback = { navController.navigate(Routes.ROUTE_HEIGHT) }
-            )
-        }
-        composable(Routes.ROUTE_HEIGHT) {
-            HeightScreen(
                 navClickCallback = { navController.navigate(Routes.ROUTE_GOAL) }
             )
         }
@@ -128,7 +110,7 @@ fun OnboardingNavigation(context: Context, navController: NavHostController, sha
             NutrientGoalScreen(
                 snackbarHostState = snackbarHostState,
                 onNextClick = {
-                   // val sharedPreferences: DefaultSharedPreferences = DefaultSharedPreferences(context)
+                    // val sharedPreferences: DefaultSharedPreferences = DefaultSharedPreferences(context)
                     sharedPreferences.setOnBoardingShown(true)
                     navController.navigate(Routes.ROUTE_HOME_SCREEN) {
                         popUpTo(Routes.ROUTE_WELCOME) { inclusive = true }

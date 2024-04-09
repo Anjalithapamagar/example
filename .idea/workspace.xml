@@ -9,8 +9,23 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d1a049fe-b26c-4d30-883d-e72031ce4117" name="Changes" comment="UI Designs and Profile Screen Changes">
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
+    <list default="true" id="d1a049fe-b26c-4d30-883d-e72031ce4117" name="Changes" comment="Test">
+      <change beforePath="$PROJECT_DIR$/.gradle/8.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.2/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/AndroidFirebaseApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/AndroidFirebaseApp.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/HomeScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/age/AgeScreen.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/gender/GenderSelectionScreen.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/gender/GenderSelectionViewModel.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/height/HeightScreen.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/height/HeightViewModel.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/weight/WeightScreen.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/onboarding/weight/WeightViewModel.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/storage/OnboardingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/ui/screens/storage/OnboardingScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/CommunityScreenViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/CommunityScreenViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/FoodNotification.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/FoodNotificationService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/FoodNotificationService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/Routes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ca/centennial/finalproyect/utils/Routes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -322,7 +337,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712441585698</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Test">
+      <option name="closed" value="true" />
+      <created>1712687867974</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1712687867974</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -346,6 +369,7 @@
     <MESSAGE value="Added Login, SignUp, ForgotPassword Screen UI. and initialize API" />
     <MESSAGE value="Added Community Screen with partial functionality" />
     <MESSAGE value="UI Designs and Profile Screen Changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="UI Designs and Profile Screen Changes" />
+    <MESSAGE value="Test" />
+    <option name="LAST_COMMIT_MESSAGE" value="Test" />
   </component>
 </project>

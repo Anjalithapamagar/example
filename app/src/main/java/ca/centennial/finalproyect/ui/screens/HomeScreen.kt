@@ -20,7 +20,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -43,6 +47,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -100,7 +106,7 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
     val context = LocalContext.current
 
     val profileViewModel = remember { ProfileViewModel() }
-//    var showDialog by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
     var userData by remember { mutableStateOf(User()) }
     val postNotificationPermission=
@@ -122,14 +128,14 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
         }
     }
 
-//    val onLogoutConfirmed: () -> Unit = {
-//        auth.signOut()
-//        navigation.navigate(Routes.Login.route) {
-//            popUpTo(Routes.Home.route) {
-//                inclusive = true
-//            }
-//        }
-//    }
+    val onLogoutConfirmed: () -> Unit = {
+        auth.signOut()
+        navigation.navigate(Routes.Login.route) {
+            popUpTo(Routes.Home.route) {
+                inclusive = true
+            }
+        }
+    }
 
     Scaffold (
         topBar = {
@@ -189,16 +195,16 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                     },
                     colors = TopAppBarDefaults.smallTopAppBarColors(),
                     actions = {
-//                        IconButton(
-//                            onClick = {
-//                                showDialog = true
-//                            }
-//                        ) {
-//                            Icon(
-//                                Icons.Outlined.ExitToApp,
-//                                contentDescription = stringResource(R.string.sign_off), tint = Color(0xFF2E7D32)
-//                            )
-//                        }
+                        IconButton(
+                            onClick = {
+                                showDialog = true
+                            }
+                        ) {
+                            Icon(
+                                Icons.Outlined.ExitToApp,
+                                contentDescription = stringResource(R.string.sign_off), tint = Color(0xFF2E7D32)
+                            )
+                        }
                         IconButton(
                             onClick = {
                                 foodNotificationService.showExpandableNotification()
@@ -215,12 +221,12 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
         }
     ){ contentPadding ->
         Box(modifier = Modifier.padding(contentPadding)) {
-//            if (showDialog) {
-//                LogoutDialog(onConfirmLogout = {
-//                    onLogoutConfirmed()
-//                    showDialog = false
-//                }, onDismiss = { showDialog = false })
-//            }
+            if (showDialog) {
+                LogoutDialog(onConfirmLogout = {
+                    onLogoutConfirmed()
+                    showDialog = false
+                }, onDismiss = { showDialog = false })
+            }
             BottomNavGraph(navController = navController, context = context, authManager = auth, posts = posts, sharedPreferences= sharedPreferences  )
         }
     }
@@ -266,29 +272,34 @@ fun displayWelcomeMessage() {
     isButtonVisible = mFirebaseRemoteConfig[IS_BUTTON_VISIBLE_KEY].asBoolean()
 }
 
-//@Composable
-//fun LogoutDialog(onConfirmLogout: () -> Unit, onDismiss: () -> Unit) {
-//    AlertDialog(
-//        onDismissRequest = onDismiss,
-//        title = { Text("Sign out") },
-//        text = { Text("Are you sure you want to log out?") },
-//        confirmButton = {
-//            Button(
-//                onClick = onConfirmLogout
-//            ) {
-//                Text("Yes")
-//            }
-//        },
-//        dismissButton = {
-//            Button(
-//                onClick = onDismiss
-//            ) {
-//                Text("Cancel")
-//            }
-//        }
-//    )
-//}
-
+@Composable
+fun LogoutDialog(onConfirmLogout: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Log Out", color = Color(0xFF1B5E20), fontWeight = FontWeight.Bold) },
+        text = { Text("Are you sure you want to log out?") },
+        confirmButton = {
+            Button(
+                onClick = onConfirmLogout,
+                colors = ButtonDefaults.buttonColors(
+                    Color(0xFF2E7D32)
+                )
+            ) {
+                Text("Accept")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(
+                    Color(0xFF2E7D32)
+                )
+            ) {
+                Text("Cancel")
+            }
+        }
+    )
+}
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
