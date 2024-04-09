@@ -4,7 +4,9 @@ package ca.centennial.finalproyect
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class AndroidFirebaseApp : Application() {
     companion object {
         const val FCM_CHANNEL_ID = "FCM_CHANNEL_ID"

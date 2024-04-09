@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -86,4 +88,36 @@ dependencies {
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+
+
+
+    //hilt dependencies
+    implementation "com.google.dagger:hilt-android:${hiltVersion}"
+    kapt "com.google.dagger:hilt-android-compiler:${hiltVersion}"
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+
+    //timber for logging
+    implementation "com.jakewharton.timber:timber:${timberVersion}"
+
+    //navigation dependencies
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    //view model dependency
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+
+    //retrofit dependency
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    //gson convertor factory
+    implementation "com.squareup.retrofit2:converter-gson:$gson_convertor_factory"
+    implementation "com.squareup.okhttp3:logging-interceptor:$http_logging_interceptor"
+
+
+
+    //database - room
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+
+
 }

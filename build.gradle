@@ -5,4 +5,15 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.7.20' apply false
     id 'com.google.gms.google-services' version '4.3.15' apply false
     id 'com.google.firebase.crashlytics' version '2.9.5' apply false
+    id("com.google.dagger.hilt.android") version "2.44" apply false
+}
+
+ext{
+    hiltVersion = "2.44.2"
+    timberVersion="5.0.1"
+    nav_version = "2.6.0"
+    retrofit_version = '2.9.0'
+    gson_convertor_factory = '2.9.0'
+    http_logging_interceptor = '4.11.0'
+    room_version = "2.5.1"
 }

@@ -65,4 +65,42 @@
     <string name="signup">Sign Up\n</string>
     <string name="just_now">Just Now</string>
 
+    <!--- MAIN SCRREN 2-->
+
+    <string name="hello_lets_s_find_out_more_about_you">Hello! Let\'s find out more about you :)</string>
+    <string name="next">Next</string>
+    <string name="what_is_your_gender">What is your gender?</string>
+    <string name="whats_your_age">What\'s your age?</string>
+    <string name="whats_your_height">What\'s your height?</string>
+    <string name="whats_your_weight">What\'s your weight?</string>
+    <string name="whats_your_activity_level">What\'s your activity level?</string>
+    <string name="whats_your_goal">Do you want to loose, keep or gain weight?</string>
+    <string name="whats_your_nutrient_goal">What are your nutrient goals?</string>
+    <string name="years">years</string>
+    <string name="cms">cms</string>
+    <string name="kg">kg</string>
+    <string name="carbs">% carbs</string>
+    <string name="proteins">% proteins</string>
+    <string name="fats">% fats</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="inches">inches</string>
+    <string name="loose">Loose</string>
+    <string name="keep">Keep</string>
+    <string name="gain">Gain</string>
+    <string name="add_breakfast">Add Breakfast</string>
+    <string name="hint_search">Search..</string>
+    <string name="your_goal">Your Goal :</string>
+    <string name="kcal">Kcal</string>
+    <string name="protein">Protein</string>
+    <string name="fat">Fat</string>
+    <string name="unit_carbs">Carbs</string>
+    <string name="prev_day">Prev Day</string>
+    <string name="next_day">Next Day</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="lunch">Lunch</string>
+    <string name="dinner">Dinner</string>
+    <string name="snacks">Snacks</string>
+    <string name="no_food">No Food</string>
+
 </resources>

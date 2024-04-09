@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import ca.centennial.finalproyect.data.local.DefaultSharedPreferences
 import ca.centennial.finalproyect.model.Post
 import com.google.firebase.auth.FirebaseUser
 import ca.centennial.finalproyect.ui.screens.HomeScreen
@@ -23,7 +24,8 @@ import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.FirestoreManager
 
 @Composable
-fun Navigation(context: Context, navController: NavHostController = rememberNavController()) {
+fun Navigation(context: Context, sharedPreferences: DefaultSharedPreferences,
+               navController: NavHostController = rememberNavController()) {
     var analytics: AnalyticsManager = AnalyticsManager(context)
     val authManager: AuthManager = AuthManager(context)
     val firestoreManager = FirestoreManager(context)
@@ -56,7 +58,8 @@ fun Navigation(context: Context, navController: NavHostController = rememberNavC
                     analytics = analytics,
                     auth = authManager,
                     navigation = navController,
-                    posts = posts
+                    posts = posts,
+                    sharedPreferences = sharedPreferences,
                 )
             }
             composable(Routes.SignUp.route) {

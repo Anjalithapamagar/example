@@ -9,12 +9,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import ca.centennial.finalproyect.data.local.DefaultSharedPreferences
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import ca.centennial.finalproyect.ui.navigation.Navigation
 import ca.centennial.finalproyect.ui.theme.Android_firebaseTheme
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var sharedPreferences: DefaultSharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +31,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Android_firebaseTheme {
-                Navigation(this)
+                Navigation(this, sharedPreferences = sharedPreferences)
             }
         }
     }

@@ -55,11 +55,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ca.centennial.finalproyect.R
+import ca.centennial.finalproyect.data.local.DefaultSharedPreferences
 import ca.centennial.finalproyect.model.Post
 import ca.centennial.finalproyect.model.User
 import ca.centennial.finalproyect.ui.navigation.Routes
 import ca.centennial.finalproyect.ui.screens.db.DailyMealPlanScreen
 import ca.centennial.finalproyect.ui.screens.db.ProfileScreen
+import ca.centennial.finalproyect.ui.screens.storage.OnboardingScreen
 import ca.centennial.finalproyect.utils.AnalyticsManager
 import ca.centennial.finalproyect.utils.AuthManager
 import ca.centennial.finalproyect.utils.FoodNotificationService
@@ -87,7 +89,7 @@ val IS_BUTTON_VISIBLE_KEY = "is_button_visible"
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavController, posts: List<Post>) {
+fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavController, posts: List<Post>,sharedPreferences: DefaultSharedPreferences) {
     analytics.logScreenView(screenName = Routes.Home.route)
     val navController = rememberNavController()
 
@@ -219,7 +221,7 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
 //                    showDialog = false
 //                }, onDismiss = { showDialog = false })
 //            }
-            BottomNavGraph(navController = navController, context = context, authManager = auth, posts = posts)
+            BottomNavGraph(navController = navController, context = context, authManager = auth, posts = posts, sharedPreferences= sharedPreferences  )
         }
     }
 }
@@ -327,10 +329,12 @@ fun RowScope.AddItem(screens: BottomNavScreen, currentDestination: NavDestinatio
 }
 
 @Composable
-fun BottomNavGraph(navController: NavHostController, context: Context, authManager: AuthManager, posts: List<Post>) {
+fun BottomNavGraph(navController: NavHostController, context: Context, authManager: AuthManager, posts: List<Post>,sharedPreferences: DefaultSharedPreferences) {
     NavHost(navController = navController, startDestination = BottomNavScreen.Home.route) {
         composable(route = BottomNavScreen.Home.route) {
-            DailyMealPlanScreen(authManager = authManager)
+            //DailyMealPlanScreen(authManager = authManager)
+            OnboardingScreen(context,
+                sharedPreferences )
         }
         composable(route = BottomNavScreen.Profile.route) {
             ProfileScreen(authManager = authManager, navigation = navController)
