@@ -264,28 +264,28 @@ fun ProfileScreen(authManager: AuthManager, navigation: NavController) {
             }
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button(
-                onClick = {
-                    showDialog = true
-                },
-                shape = RoundedCornerShape(24.dp),
-                modifier = Modifier
-                    .width(300.dp)
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(
-                    Color(0xFF2E7D32)
-                )
-            ) {
-                Icon(Icons.Outlined.ExitToApp, contentDescription = stringResource(R.string.sign_off))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Logout")
-            }
-            if (showDialog) {
-                LogoutDialog(onConfirmLogout = {
-                    onLogoutConfirmed()
-                    showDialog = false
-                }, onDismiss = { showDialog = false })
-            }
+//            Button(
+//                onClick = {
+//                    showDialog = true
+//                },
+//                shape = RoundedCornerShape(24.dp),
+//                modifier = Modifier
+//                    .width(300.dp)
+//                    .height(50.dp),
+//                colors = ButtonDefaults.buttonColors(
+//                    Color(0xFF2E7D32)
+//                )
+//            ) {
+//                Icon(Icons.Outlined.ExitToApp, contentDescription = stringResource(R.string.sign_off))
+//                Spacer(modifier = Modifier.width(8.dp))
+//                Text(text = "Logout")
+//            }
+//            if (showDialog) {
+//                LogoutDialog(onConfirmLogout = {
+//                    onLogoutConfirmed()
+//                    showDialog = false
+//                }, onDismiss = { showDialog = false })
+//            }
         }
     }
 }

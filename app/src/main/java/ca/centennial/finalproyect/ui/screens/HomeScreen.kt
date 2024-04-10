@@ -197,6 +197,14 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                     actions = {
                         IconButton(
                             onClick = {
+                                foodNotificationService.showExpandableNotification()
+                            }
+                        ) {
+                            Icon(Icons.Outlined.Notifications, contentDescription = "Expandable Notifications", tint = Color(0xFF2E7D32))
+                        }
+
+                        IconButton(
+                            onClick = {
                                 showDialog = true
                             }
                         ) {
@@ -204,13 +212,6 @@ fun HomeScreen(analytics: AnalyticsManager, auth: AuthManager, navigation: NavCo
                                 Icons.Outlined.ExitToApp,
                                 contentDescription = stringResource(R.string.sign_off), tint = Color(0xFF2E7D32)
                             )
-                        }
-                        IconButton(
-                            onClick = {
-                                foodNotificationService.showExpandableNotification()
-                            }
-                        ) {
-                            Icon(Icons.Outlined.Notifications, contentDescription = "Expandable Notifications", tint = Color(0xFF2E7D32))
                         }
                     }
                 )
